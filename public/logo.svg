@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Curator">
+  <defs>
+    <linearGradient id="curatorGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3D82FF"/>
+      <stop offset="1" stop-color="#06BBA4"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="96" height="96" rx="23" fill="url(#curatorGrad)"/>
+  <rect x="43" y="23" width="25" height="46" rx="5" fill="#ffffff" opacity="0.4"/>
+  <rect x="37" y="27.5" width="25" height="46" rx="5" fill="#ffffff" opacity="0.7"/>
+  <rect x="31" y="32" width="25" height="46" rx="5" fill="#ffffff"/>
+</svg>

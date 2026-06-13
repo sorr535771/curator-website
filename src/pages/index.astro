@@ -7,14 +7,20 @@ const lifetimePrice = "$80"; // one-time, current major version only
 const trialDays = 14;
 const siteUrl = "https://yourcurator.app";
 const ogImage = `${siteUrl}/og-card.png`; // absolute — social scrapers need a full URL
-const features = [
+// `?v=` query suffixes are cache-busters: several feature images were refreshed
+// in place (same filename), so a bumped version forces browsers to re-fetch.
+type Feature = {
+  id: string; eyebrow: string; title: string; body: string;
+  img?: string; slides?: string[]; alt: string; bullets: string[];
+};
+const features: Feature[] = [
   {
     id: "matching",
     eyebrow: "Smart matching",
     title: "Messy filenames in. Correct names out.",
     body:
       "Drop in a folder of cryptically-named downloads and Curator works out what each one is — the right show, the right film, the real episode title — using TheTVDB, TheMovieDB and Trakt. It shows you a confidence score for every match, and when it's not sure, you pick from a list of posters rather than guessing.",
-    img: "/img/03-match-list-light.png",
+    img: "/img/03-match-list-light.png?v=2",
     alt: "Curator matching messy filenames to clean, correctly-named episodes",
     bullets: ["Real episode titles, not just S01E02", "A poster picker when a match is uncertain", "Match a whole season in one go"],
   },
@@ -24,7 +30,7 @@ const features = [
     title: "A library worth browsing.",
     body:
       "Everything you file lands in a poster wall that actually feels like a collection — sorted, searchable, with quality and codec badges read from the real files and community ratings on every tile. It's the part of organising your media that's usually a spreadsheet, made into something you'll open for fun.",
-    img: "/img/05-collection-light.png",
+    img: "/img/05-collection-light.png?v=2",
     alt: "Curator's collection poster wall with quality badges and ratings",
     bullets: ["4K / HD / codec badges from the actual file", "★ ratings on every title", "Bring your own artwork any time"],
   },
@@ -34,8 +40,8 @@ const features = [
     title: "See exactly what you're missing.",
     body:
       "Curator knows how many episodes a season should have, so it can tell you what you've got and what you haven't — per show, per season, down to the individual episode. The missing-episodes report turns that into a simple shopping list for finishing a collection.",
-    img: "/img/06-completion-seasons-light.png",
-    alt: "Per-season completion percentages in Curator",
+    slides: ["/img/06-completion-seasons-light.png?v=2", "/img/missing-episodes.png"],
+    alt: "Curator's per-season completion percentages and its missing-episodes report",
     bullets: ["% owned for every show and season", "A grid of the gaps you're missing", "Export a 'what to get next' list"],
   },
   {
@@ -44,8 +50,14 @@ const features = [
     title: "Put it on the big screen.",
     body:
       "A full-screen, slowly-crossfading wall of your own posters. Lovely on a TV or a spare monitor, and a quiet reminder of just how much you've built.",
-    img: "/img/10-presentation-dark.png",
-    alt: "Curator presentation mode showing a full-screen poster",
+    slides: [
+      "/img/pres-1.png",
+      "/img/pres-2.png",
+      "/img/pres-3.png",
+      "/img/pres-4.png",
+      "/img/pres-5.png",
+    ],
+    alt: "Curator presentation mode cycling through full-screen posters",
     bullets: ["Full-screen poster slideshow", "Runs on a second display", "Your library, as a screensaver"],
   },
   {
@@ -132,11 +144,11 @@ const features = [
             muted
             playsinline
             preload="auto"
-            poster="/video/curator-hero-poster.png"
+            poster="/video/curator-hero-poster.png?v=2"
             aria-label="Curator tidying a folder of messy downloads into clean, correctly-named files and a collection poster wall"
           >
-            <source src="/video/curator-hero.webm" type="video/webm" />
-            <source src="/video/curator-hero.mp4" type="video/mp4" />
+            <source src="/video/curator-hero.webm?v=2" type="video/webm" />
+            <source src="/video/curator-hero.mp4?v=2" type="video/mp4" />
           </video>
         </div>
       </section>
@@ -156,8 +168,16 @@ const features = [
                   ))}
                 </ul>
               </div>
-              <div class="feature-shot">
-                <img src={f.img} alt={f.alt} loading="lazy" />
+              <div class={f.slides ? "feature-shot slideshow" : "feature-shot"}>
+                {
+                  f.slides ? (
+                    f.slides.map((s, si) => (
+                      <img src={s} alt={f.alt} class={si === 0 ? "active" : ""} />
+                    ))
+                  ) : (
+                    <img src={f.img} alt={f.alt} loading="lazy" />
+                  )
+                }
               </div>
             </div>
           ))
@@ -367,6 +387,15 @@ const features = [
     width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);
     border: 1px solid var(--line);
   }
+  /* Crossfading slideshow (completion + presentation features). The first slide
+     stays in flow to size the box; the rest overlay it and fade in/out. */
+  .slideshow { position: relative; }
+  .slideshow img { opacity: 0; transition: opacity 1s ease-in-out; }
+  .slideshow img:not(:first-child) { position: absolute; inset: 0; }
+  .slideshow img.active { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .slideshow img { transition: none; }
+  }
   .ticks { list-style: none; padding: 0; margin: 1.3rem 0 0; display: grid; gap: 0.5rem; }
   .ticks li { position: relative; padding-left: 1.7rem; color: var(--ink); }
   .ticks li::before {
@@ -457,5 +486,21 @@ const features = [
     ["pointerdown", "touchstart", "scroll", "keydown"].forEach((e) =>
       document.addEventListener(e, tryPlay, { once: true, passive: true }),
     );
+  }
+
+  // Crossfade each feature slideshow through its slides on a timer. Skipped when
+  // the visitor prefers reduced motion (CSS also disables the fade then).
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion) {
+    document.querySelectorAll(".slideshow").forEach((sl) => {
+      const imgs = Array.from(sl.querySelectorAll("img"));
+      if (imgs.length < 2) return;
+      let i = 0;
+      setInterval(() => {
+        imgs[i].classList.remove("active");
+        i = (i + 1) % imgs.length;
+        imgs[i].classList.add("active");
+      }, 2800);
+    });
   }
 </script>

@@ -5,6 +5,8 @@
 const yearlyPrice = "$9.99"; // yearly subscription
 const lifetimePrice = "$80"; // one-time, current major version only
 const trialDays = 14;
+const siteUrl = "https://yourcurator.app";
+const ogImage = `${siteUrl}/og-card.png`; // absolute — social scrapers need a full URL
 const features = [
   {
     id: "matching",
@@ -72,14 +74,15 @@ const features = [
       name="description"
       content="Curator renames messy media downloads into clean, correctly-named files and files them into a collection worth browsing. A fast, native app for macOS, Windows and Linux."
     />
-    <!-- PLACEHOLDER: set real URL/image once the domain is live -->
+    <link rel="canonical" href={`${siteUrl}/`} />
     <meta property="og:title" content="Curator — tidy media, automatically" />
     <meta
       property="og:description"
       content="Rename messy downloads into clean, correctly-named files and build a collection worth browsing. Native. Fast. Yours."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/og-card.png" />
+    <meta property="og:url" content={`${siteUrl}/`} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -88,7 +91,7 @@ const features = [
       name="twitter:description"
       content="Rename messy downloads into clean, correctly-named files and build a collection worth browsing. Native. Fast. Yours."
     />
-    <meta name="twitter:image" content="/og-card.png" />
+    <meta name="twitter:image" content={ogImage} />
   </head>
   <body>
     <a class="skip" href="#features">Skip to content</a>

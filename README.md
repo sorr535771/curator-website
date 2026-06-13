@@ -37,10 +37,10 @@ Everything below is marked with `PLACEHOLDER` comments in the code.
 
 | What | Where | Notes |
 |------|-------|-------|
-| **Yearly price** | `src/pages/index.astro` → `const price = "£39"` | Currently a guess — set the real figure. |
+| ~~Pricing~~ ✅ DONE | `src/pages/index.astro` → `yearlyPrice` / `lifetimePrice` | Yearly $9.99/yr + Lifetime $80 (current major only). |
 | **Download links** | `index.astro` → the three `#` hrefs in the Download + hero sections | Point at the signed installers (host on **GitHub Releases** or Cloudflare R2). |
-| **Buy / subscribe (Paddle)** | the "Start free trial" / pricing CTA | Right now everything points to the trial download. When Paddle is live, add its JS snippet (`<script src="…paddle.js">`) and wire a `Paddle.Checkout.open({ items: […] })` button for the paid plan. |
-| **Domain** | `astro.config.mjs` → `site` + the `og:` meta in `index.astro` | Set the real URL for canonical links + social cards. |
+| **Buy / subscribe (Paddle)** | the "Start free trial" / pricing CTA | Right now everything points to the trial download. When Paddle is live, add its JS snippet (`<script src="…paddle.js">`) and wire `Paddle.Checkout.open({ items: […] })` for both the yearly and lifetime plans. |
+| ~~Domain~~ ✅ DONE | `astro.config.mjs` → `site` | Set to `https://yourcurator.app`; canonical + absolute `og:`/`twitter:` URLs derive from it. |
 | **OG / social image** | `index.astro` `og:image` | Currently reuses a collection screenshot; a dedicated 1200×630 card is nicer. |
 | **Logo / favicon** | `public/logo.png`, `public/favicon.png` | Using the app icon — fine, but a wordmark could be added. |
 

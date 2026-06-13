@@ -11,7 +11,7 @@ const ogImage = `${siteUrl}/og-card.png`; // absolute — social scrapers need a
 // in place (same filename), so a bumped version forces browsers to re-fetch.
 type Feature = {
   id: string; eyebrow: string; title: string; body: string;
-  img?: string; slides?: string[]; alt: string; bullets: string[];
+  img?: string; slides?: string[]; alt: string; bullets: string[]; note?: string;
 };
 const features: Feature[] = [
   {
@@ -33,6 +33,7 @@ const features: Feature[] = [
     img: "/img/05-collection-light.png?v=2",
     alt: "Curator's collection poster wall with quality badges and ratings",
     bullets: ["4K / HD / codec badges from the actual file", "★ ratings on every title", "Bring your own artwork any time"],
+    note: "A note while we're getting started: TV artwork is live today, but full studio movie posters switch on a little after launch. Until then films are still matched and named correctly — they just show a placeholder you can swap for your own poster.",
   },
   {
     id: "completion",
@@ -167,6 +168,7 @@ const features: Feature[] = [
                     <li>{b}</li>
                   ))}
                 </ul>
+                {f.note && <p class="feature-note">{f.note}</p>}
               </div>
               <div class={f.slides ? "feature-shot slideshow" : "feature-shot"}>
                 {
@@ -401,6 +403,11 @@ const features: Feature[] = [
   .ticks li::before {
     content: "✓"; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700;
   }
+  .feature-note {
+    margin: 1.4rem 0 0; padding: 0.85rem 1rem; font-size: 0.92rem; color: var(--ink-soft);
+    background: #f5f7ff; border: 1px solid #e3e9ff; border-left: 3px solid var(--accent);
+    border-radius: 10px;
+  }
 
   /* Strip */
   .strip { background: var(--bg-dark); color: #f3f3f7; padding: 4.5rem 1.5rem; }
@@ -416,11 +423,12 @@ const features: Feature[] = [
   .pricing h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: 0.6rem; }
   .price-grid {
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem;
-    max-width: 760px; margin: 2rem auto 0; align-items: start;
+    max-width: 760px; margin: 2rem auto 0; align-items: stretch;
   }
   .price-card {
     border: 1px solid var(--line); border-radius: 22px;
     padding: 2.4rem; box-shadow: var(--shadow); background: #fff;
+    display: flex; flex-direction: column;
   }
   .price-card.featured { border-color: var(--accent); box-shadow: 0 10px 40px rgba(27, 67, 196, 0.18); }
   .plan-name { font-weight: 700; font-size: 1.05rem; margin: 0 0 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
@@ -432,8 +440,8 @@ const features: Feature[] = [
   .price { font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; }
   .per { color: var(--ink-soft); font-weight: 600; }
   .price-sub { color: var(--ink-soft); margin: 0.4rem 0 1.4rem; }
-  .price-card .ticks { margin: 1.2rem 0 1.8rem; }
-  .price-foot { text-align: center; color: var(--ink-soft); font-size: 0.88rem; margin: 0.9rem 0 0; }
+  .price-card .ticks { margin: 1.2rem 0 1.8rem; flex: 1 0 auto; }
+  .price-foot { text-align: center; color: var(--ink-soft); font-size: 0.88rem; margin: 0.9rem 0 0; min-height: 2.7rem; }
   @media (max-width: 640px) { .price-grid { grid-template-columns: 1fr; } }
 
   /* Download */

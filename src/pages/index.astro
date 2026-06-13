@@ -14,7 +14,7 @@ const features = [
     title: "Messy filenames in. Correct names out.",
     body:
       "Drop in a folder of cryptically-named downloads and Curator works out what each one is — the right show, the right film, the real episode title — using TheTVDB, TheMovieDB and Trakt. It shows you a confidence score for every match, and when it's not sure, you pick from a list of posters rather than guessing.",
-    img: "/img/03-match-list-dark.png",
+    img: "/img/03-match-list-light.png",
     alt: "Curator matching messy filenames to clean, correctly-named episodes",
     bullets: ["Real episode titles, not just S01E02", "A poster picker when a match is uncertain", "Match a whole season in one go"],
   },
@@ -24,7 +24,7 @@ const features = [
     title: "A library worth browsing.",
     body:
       "Everything you file lands in a poster wall that actually feels like a collection — sorted, searchable, with quality and codec badges read from the real files and community ratings on every tile. It's the part of organising your media that's usually a spreadsheet, made into something you'll open for fun.",
-    img: "/img/05-collection-dark.png",
+    img: "/img/05-collection-light.png",
     alt: "Curator's collection poster wall with quality badges and ratings",
     bullets: ["4K / HD / codec badges from the actual file", "★ ratings on every title", "Bring your own artwork any time"],
   },
@@ -34,7 +34,7 @@ const features = [
     title: "See exactly what you're missing.",
     body:
       "Curator knows how many episodes a season should have, so it can tell you what you've got and what you haven't — per show, per season, down to the individual episode. The missing-episodes report turns that into a simple shopping list for finishing a collection.",
-    img: "/img/06-completion-seasons-dark.png",
+    img: "/img/06-completion-seasons-light.png",
     alt: "Per-season completion percentages in Curator",
     bullets: ["% owned for every show and season", "A grid of the gaps you're missing", "Export a 'what to get next' list"],
   },
@@ -126,14 +126,7 @@ const features = [
         <p class="cta-note">{trialDays}-day free trial · no card required</p>
 
         <div class="hero-media">
-          <video
-            src="/video/adding-media.mp4"
-            poster="/img/03-match-list-light.png"
-            autoplay
-            muted
-            loop
-            playsinline
-          ></video>
+          <img src="/img/02-hero-light.png" alt="The Curator app, ready to tidy your media" />
         </div>
       </section>
 
@@ -346,9 +339,8 @@ const features = [
   .hero-media {
     margin: 3.5rem auto 0; max-width: 980px; border-radius: var(--radius);
     overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line);
-    background: #0b0b0f;
   }
-  .hero-media video { width: 100%; height: auto; }
+  .hero-media img { width: 100%; height: auto; display: block; }
 
   /* Features */
   .features { max-width: var(--max); margin: 0 auto; padding: 4rem 1.5rem; }
@@ -429,7 +421,7 @@ const features = [
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .hero-media video { display: none; }
+    .hero-media { margin-top: 2.5rem; }
   }
 </style>
 

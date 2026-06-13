@@ -1,0 +1,396 @@
+---
+// Curator — marketing landing page (static Astro).
+// PLACEHOLDERS to set before launch (see README): price, download URLs,
+// Paddle checkout link, real domain in astro.config.mjs + the OG/meta below.
+const price = "£39"; // PLACEHOLDER yearly price
+const trialDays = 14;
+const features = [
+  {
+    id: "matching",
+    eyebrow: "Smart matching",
+    title: "Messy filenames in. Correct names out.",
+    body:
+      "Drop in a folder of cryptically-named downloads and Curator works out what each one is — the right show, the right film, the real episode title — using TheTVDB, TheMovieDB and Trakt. It shows you a confidence score for every match, and when it's not sure, you pick from a list of posters rather than guessing.",
+    img: "/img/03-match-list-dark.png",
+    alt: "Curator matching messy filenames to clean, correctly-named episodes",
+    bullets: ["Real episode titles, not just S01E02", "A poster picker when a match is uncertain", "Match a whole season in one go"],
+  },
+  {
+    id: "collection",
+    eyebrow: "Your collection",
+    title: "A library worth browsing.",
+    body:
+      "Everything you file lands in a poster wall that actually feels like a collection — sorted, searchable, with quality and codec badges read from the real files and community ratings on every tile. It's the part of organising your media that's usually a spreadsheet, made into something you'll open for fun.",
+    img: "/img/05-collection-dark.png",
+    alt: "Curator's collection poster wall with quality badges and ratings",
+    bullets: ["4K / HD / codec badges from the actual file", "★ ratings on every title", "Bring your own artwork any time"],
+  },
+  {
+    id: "completion",
+    eyebrow: "Completion tracking",
+    title: "See exactly what you're missing.",
+    body:
+      "Curator knows how many episodes a season should have, so it can tell you what you've got and what you haven't — per show, per season, down to the individual episode. The missing-episodes report turns that into a simple shopping list for finishing a collection.",
+    img: "/img/06-completion-seasons-dark.png",
+    alt: "Per-season completion percentages in Curator",
+    bullets: ["% owned for every show and season", "A grid of the gaps you're missing", "Export a 'what to get next' list"],
+  },
+  {
+    id: "presentation",
+    eyebrow: "Presentation mode",
+    title: "Put it on the big screen.",
+    body:
+      "A full-screen, slowly-crossfading wall of your own posters. Lovely on a TV or a spare monitor, and a quiet reminder of just how much you've built.",
+    img: "/img/10-presentation-dark.png",
+    alt: "Curator presentation mode showing a full-screen poster",
+    bullets: ["Full-screen poster slideshow", "Runs on a second display", "Your library, as a screensaver"],
+  },
+  {
+    id: "control",
+    eyebrow: "Your rules",
+    title: "Organised exactly how you want.",
+    body:
+      "Choose whether each item gets its own tidy folder or is renamed in place — and watch the new name update live as you toggle. Move, copy or overwrite. Use the Smart preset that tells TV from film automatically, or pin your own. Nothing is ever overwritten by accident, and every rename is a single click to undo.",
+    img: "/img/11-folder-toggle-on.png",
+    alt: "Curator's folder, placement and preset controls",
+    bullets: ["Folder structure on or off — preview updates live", "Move · Copy · Overwrite", "One-click undo, never clobbers a file"],
+  },
+];
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>Curator — tidy media, automatically</title>
+    <meta
+      name="description"
+      content="Curator renames messy media downloads into clean, correctly-named files and files them into a collection worth browsing. A fast, native app for macOS, Windows and Linux."
+    />
+    <!-- PLACEHOLDER: set real URL/image once the domain is live -->
+    <meta property="og:title" content="Curator — tidy media, automatically" />
+    <meta
+      property="og:description"
+      content="Rename messy downloads into clean, correctly-named files and build a collection worth browsing. Native. Fast. Yours."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/img/05-collection-dark.png" />
+  </head>
+  <body>
+    <a class="skip" href="#features">Skip to content</a>
+
+    <header class="nav">
+      <a class="brand" href="/">
+        <img src="/logo.png" width="28" height="28" alt="" />
+        <span>Curator</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#download">Download</a>
+        <a class="btn btn-sm" href="#download">Free trial</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <p class="eyebrow">A modern alternative to FileBot</p>
+        <h1>Tidy media,<br /><span class="grad">automatically.</span></h1>
+        <p class="lead">
+          Curator renames cryptic downloads into clean, correctly-named files — then
+          files them into a collection worth browsing. Native and fast on macOS,
+          Windows and Linux. No browser in disguise, no Java.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="#download">Download free trial</a>
+          <a class="btn btn-lg btn-ghost" href="#matching">See how it works</a>
+        </div>
+        <p class="cta-note">{trialDays}-day free trial · no card required</p>
+
+        <div class="hero-media">
+          <video
+            src="/video/adding-media.mp4"
+            poster="/img/03-match-list-light.png"
+            autoplay
+            muted
+            loop
+            playsinline
+          ></video>
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section id="features" class="features">
+        {
+          features.map((f, i) => (
+            <div class={`feature ${i % 2 ? "reverse" : ""}`} id={f.id}>
+              <div class="feature-copy">
+                <p class="eyebrow">{f.eyebrow}</p>
+                <h2>{f.title}</h2>
+                <p>{f.body}</p>
+                <ul class="ticks">
+                  {f.bullets.map((b) => (
+                    <li>{b}</li>
+                  ))}
+                </ul>
+              </div>
+              <div class="feature-shot">
+                <img src={f.img} alt={f.alt} loading="lazy" />
+              </div>
+            </div>
+          ))
+        }
+      </section>
+
+      <!-- NATIVE / TRUST STRIP -->
+      <section class="strip">
+        <div class="strip-grid">
+          <div>
+            <h3>Genuinely native</h3>
+            <p>Built with Rust, not a packaged web browser. A real installed app of around 12&nbsp;MB that opens instantly.</p>
+          </div>
+          <div>
+            <h3>Private by default</h3>
+            <p>Your library lives on your machine. No accounts to browse it, and you can export everything to move computers whenever you like.</p>
+          </div>
+          <div>
+            <h3>Safe renames</h3>
+            <p>Curator never overwrites a file by accident, checks the destination first, and every batch is one click to undo.</p>
+          </div>
+          <div>
+            <h3>macOS · Windows · Linux</h3>
+            <p>One app, every desktop. Light and dark, and it looks at home on each.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRICING -->
+      <section id="pricing" class="pricing">
+        <p class="eyebrow center">Pricing</p>
+        <h2 class="center">One plan. Everything in it.</h2>
+        <div class="price-card">
+          <div class="price-head">
+            <span class="price">{price}</span>
+            <span class="per">/ year</span>
+          </div>
+          <p class="price-sub">Start with a {trialDays}-day free trial — no card required.</p>
+          <ul class="ticks">
+            <li>Unlimited renaming and organising</li>
+            <li>Live matching via TheTVDB, TheMovieDB &amp; Trakt</li>
+            <li>The full collection, completion tracking &amp; presentation mode</li>
+            <li>Use it on 2 of your computers</li>
+            <li>Every update for the year</li>
+          </ul>
+          <a class="btn btn-lg full" href="#download">Start free trial</a>
+          <p class="price-foot">Then {price}/year. Cancel any time.</p>
+        </div>
+      </section>
+
+      <!-- DOWNLOAD -->
+      <section id="download" class="download">
+        <h2 class="center">Get Curator</h2>
+        <p class="center muted">Free for {trialDays} days. Pick your platform.</p>
+        <div class="dl-row">
+          <!-- PLACEHOLDER hrefs: point these at the signed installers (GitHub Releases) -->
+          <a class="btn btn-lg" href="#">macOS</a>
+          <a class="btn btn-lg" href="#">Windows</a>
+          <a class="btn btn-lg" href="#">Linux</a>
+        </div>
+        <p class="center cta-note">Apple Silicon &amp; Intel · Windows 10/11 · AppImage</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="foot-top">
+        <a class="brand" href="/">
+          <img src="/logo.png" width="24" height="24" alt="" />
+          <span>Curator</span>
+        </a>
+        <nav class="foot-links">
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#download">Download</a>
+        </nav>
+      </div>
+      <p class="attrib">
+        Metadata and artwork from
+        <a href="https://www.themoviedb.org" rel="noopener">TheMovieDB</a>,
+        <a href="https://thetvdb.com" rel="noopener">TheTVDB</a> and
+        <a href="https://trakt.tv" rel="noopener">Trakt</a>. This product uses the
+        TMDB API but is not endorsed or certified by TMDB.
+      </p>
+      <p class="copy">© <span id="yr">2026</span> Curator. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #ffffff;
+    --bg-dark: #0b0b0f;
+    --ink: #14141a;
+    --ink-soft: #5b5b66;
+    --line: #ececf1;
+    --accent: #2f6bff;
+    --accent-2: #7aa2ff;
+    --radius: 16px;
+    --max: 1120px;
+    --shadow: 0 30px 60px -25px rgba(20, 20, 40, 0.35);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  img, video { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { line-height: 1.08; letter-spacing: -0.02em; margin: 0; }
+  .center { text-align: center; }
+  .muted { color: var(--ink-soft); }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0 0 0.6rem;
+  }
+  .eyebrow.center { text-align: center; }
+
+  .skip { position: absolute; left: -999px; }
+  .skip:focus { left: 1rem; top: 1rem; background: #fff; padding: 0.5rem 1rem; z-index: 99; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent); color: #fff; font-weight: 600;
+    padding: 0.7rem 1.25rem; border-radius: 999px; transition: transform 0.12s ease, background 0.2s ease;
+    border: 1px solid transparent; white-space: nowrap;
+  }
+  .btn:hover { background: #2257e0; transform: translateY(-1px); }
+  .btn-lg { padding: 0.85rem 1.6rem; font-size: 1.02rem; }
+  .btn-sm { padding: 0.5rem 1rem; font-size: 0.92rem; }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { background: #f5f5f8; }
+  .full { width: 100%; }
+
+  /* Nav */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--max); margin: 0 auto; padding: 0.9rem 1.5rem;
+    backdrop-filter: saturate(1.4) blur(12px);
+  }
+  .nav::before {
+    content: ""; position: absolute; inset: 0; background: rgba(255,255,255,0.72);
+    border-bottom: 1px solid var(--line); z-index: -1;
+  }
+  .brand { display: inline-flex; align-items: center; gap: 0.55rem; font-weight: 700; font-size: 1.1rem; }
+  .nav-links { display: flex; align-items: center; gap: 1.4rem; font-weight: 500; }
+  .nav-links a:not(.btn):hover { color: var(--accent); }
+
+  /* Hero */
+  .hero {
+    max-width: var(--max); margin: 0 auto; padding: 5rem 1.5rem 3rem; text-align: center;
+  }
+  .hero h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); font-weight: 700; }
+  .grad {
+    background: linear-gradient(100deg, var(--accent), #00c2a8);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lead { max-width: 640px; margin: 1.4rem auto 0; font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--ink-soft); }
+  .cta-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+  .cta-note { margin-top: 0.9rem; font-size: 0.9rem; color: var(--ink-soft); }
+  .hero-media {
+    margin: 3.5rem auto 0; max-width: 980px; border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line);
+    background: #0b0b0f;
+  }
+  .hero-media video { width: 100%; height: auto; }
+
+  /* Features */
+  .features { max-width: var(--max); margin: 0 auto; padding: 4rem 1.5rem; }
+  .feature {
+    display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; align-items: center;
+    padding: 3.5rem 0;
+  }
+  .feature.reverse .feature-copy { order: 2; }
+  .feature h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); font-weight: 700; margin-bottom: 0.9rem; }
+  .feature-copy p { color: var(--ink-soft); font-size: 1.06rem; }
+  .feature-shot img {
+    width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+  .ticks { list-style: none; padding: 0; margin: 1.3rem 0 0; display: grid; gap: 0.5rem; }
+  .ticks li { position: relative; padding-left: 1.7rem; color: var(--ink); }
+  .ticks li::before {
+    content: "✓"; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700;
+  }
+
+  /* Strip */
+  .strip { background: var(--bg-dark); color: #f3f3f7; padding: 4.5rem 1.5rem; }
+  .strip-grid {
+    max-width: var(--max); margin: 0 auto; display: grid;
+    grid-template-columns: repeat(4, 1fr); gap: 2.5rem;
+  }
+  .strip h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+  .strip p { color: #a9a9b6; font-size: 0.98rem; margin: 0; }
+
+  /* Pricing */
+  .pricing { max-width: var(--max); margin: 0 auto; padding: 5rem 1.5rem 3rem; }
+  .pricing h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: 2.4rem; }
+  .price-card {
+    max-width: 460px; margin: 0 auto; border: 1px solid var(--line); border-radius: 22px;
+    padding: 2.4rem; box-shadow: var(--shadow); background: #fff;
+  }
+  .price-head { display: flex; align-items: baseline; gap: 0.4rem; }
+  .price { font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; }
+  .per { color: var(--ink-soft); font-weight: 600; }
+  .price-sub { color: var(--ink-soft); margin: 0.4rem 0 1.4rem; }
+  .price-card .ticks { margin-bottom: 1.8rem; }
+  .price-foot { text-align: center; color: var(--ink-soft); font-size: 0.88rem; margin: 0.9rem 0 0; }
+
+  /* Download */
+  .download { max-width: var(--max); margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  .download h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+  .dl-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin: 1.8rem 0 0.6rem; }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--line); padding: 3rem 1.5rem; max-width: var(--max); margin: 0 auto; }
+  .foot-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .foot-links { display: flex; gap: 1.4rem; color: var(--ink-soft); }
+  .foot-links a:hover { color: var(--accent); }
+  .attrib { color: var(--ink-soft); font-size: 0.86rem; margin: 1.6rem 0 0.4rem; max-width: 640px; }
+  .attrib a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+  .copy { color: var(--ink-soft); font-size: 0.86rem; margin: 0; }
+
+  /* Responsive */
+  @media (max-width: 800px) {
+    .nav-links a:not(.btn) { display: none; }
+    .feature { grid-template-columns: 1fr; gap: 1.8rem; padding: 2.5rem 0; }
+    .feature.reverse .feature-copy { order: 0; }
+    .strip-grid { grid-template-columns: 1fr 1fr; gap: 1.8rem; }
+  }
+  @media (max-width: 480px) {
+    .strip-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero-media video { display: none; }
+  }
+</style>
+
+<script>
+  // Keep the footer year current without a build step.
+  const y = document.getElementById("yr");
+  if (y) y.textContent = String(new Date().getFullYear());
+</script>

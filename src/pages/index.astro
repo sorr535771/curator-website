@@ -54,8 +54,8 @@ const features = [
     title: "Organised exactly how you want.",
     body:
       "Choose whether each item gets its own tidy folder or is renamed in place — and watch the new name update live as you toggle. Move, copy or overwrite. Use the Smart preset that tells TV from film automatically, or pin your own. Nothing is ever overwritten by accident, and every rename is a single click to undo.",
-    img: "/img/11-folder-toggle-on.png",
-    alt: "Curator's folder, placement and preset controls",
+    img: "/img/settings.png",
+    alt: "Curator's settings — placement, folder, database and theme defaults",
     bullets: ["Folder structure on or off — preview updates live", "Move · Copy · Overwrite", "One-click undo, never clobbers a file"],
   },
 ];
@@ -126,7 +126,18 @@ const features = [
         <p class="cta-note">{trialDays}-day free trial · no card required</p>
 
         <div class="hero-media">
-          <img src="/img/02-hero-light.png" alt="The Curator app, ready to tidy your media" />
+          <video
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata"
+            poster="/video/curator-hero-poster.png"
+            aria-label="Curator tidying a folder of messy downloads into clean, correctly-named files and a collection poster wall"
+          >
+            <source src="/video/curator-hero.webm" type="video/webm" />
+            <source src="/video/curator-hero.mp4" type="video/mp4" />
+          </video>
         </div>
       </section>
 
@@ -340,7 +351,8 @@ const features = [
     margin: 3.5rem auto 0; max-width: 980px; border-radius: var(--radius);
     overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line);
   }
-  .hero-media img { width: 100%; height: auto; display: block; }
+  .hero-media img,
+  .hero-media video { width: 100%; height: auto; display: block; }
 
   /* Features */
   .features { max-width: var(--max); margin: 0 auto; padding: 4rem 1.5rem; }

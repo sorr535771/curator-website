@@ -2,7 +2,8 @@
 // Curator — marketing landing page (static Astro).
 // PLACEHOLDERS to set before launch (see README): price, download URLs,
 // Paddle checkout link, real domain in astro.config.mjs + the OG/meta below.
-const price = "£39"; // PLACEHOLDER yearly price
+const yearlyPrice = "$9.99"; // yearly subscription
+const lifetimePrice = "$80"; // one-time, current major version only
 const trialDays = 14;
 const features = [
   {
@@ -181,22 +182,40 @@ const features = [
       <!-- PRICING -->
       <section id="pricing" class="pricing">
         <p class="eyebrow center">Pricing</p>
-        <h2 class="center">One plan. Everything in it.</h2>
-        <div class="price-card">
-          <div class="price-head">
-            <span class="price">{price}</span>
-            <span class="per">/ year</span>
+        <h2 class="center">Pick how you pay. Same Curator.</h2>
+        <p class="price-sub center">Start with a {trialDays}-day free trial — no card required.</p>
+        <div class="price-grid">
+          <div class="price-card">
+            <p class="plan-name">Yearly</p>
+            <div class="price-head">
+              <span class="price">{yearlyPrice}</span>
+              <span class="per">/ year</span>
+            </div>
+            <ul class="ticks">
+              <li>Unlimited renaming and organising</li>
+              <li>Live matching via TheTVDB, TheMovieDB &amp; Trakt</li>
+              <li>The full collection, completion tracking &amp; presentation mode</li>
+              <li>Use it on 2 of your computers</li>
+              <li>Every update while you're subscribed</li>
+            </ul>
+            <a class="btn btn-lg full" href="#download">Start free trial</a>
+            <p class="price-foot">Then {yearlyPrice}/year. Cancel any time.</p>
           </div>
-          <p class="price-sub">Start with a {trialDays}-day free trial — no card required.</p>
-          <ul class="ticks">
-            <li>Unlimited renaming and organising</li>
-            <li>Live matching via TheTVDB, TheMovieDB &amp; Trakt</li>
-            <li>The full collection, completion tracking &amp; presentation mode</li>
-            <li>Use it on 2 of your computers</li>
-            <li>Every update for the year</li>
-          </ul>
-          <a class="btn btn-lg full" href="#download">Start free trial</a>
-          <p class="price-foot">Then {price}/year. Cancel any time.</p>
+          <div class="price-card featured">
+            <p class="plan-name">Lifetime <span class="badge">Best value</span></p>
+            <div class="price-head">
+              <span class="price">{lifetimePrice}</span>
+              <span class="per">once</span>
+            </div>
+            <ul class="ticks">
+              <li>Everything in Yearly</li>
+              <li>Pay once — no renewals</li>
+              <li>Free updates for the current major version</li>
+              <li>Use it on 2 of your computers</li>
+            </ul>
+            <a class="btn btn-lg full" href="#download">Start free trial</a>
+            <p class="price-foot">One payment of {lifetimePrice}. Covers all of the current major version.</p>
+          </div>
         </div>
       </section>
 
@@ -358,17 +377,28 @@ const features = [
 
   /* Pricing */
   .pricing { max-width: var(--max); margin: 0 auto; padding: 5rem 1.5rem 3rem; }
-  .pricing h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: 2.4rem; }
+  .pricing h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: 0.6rem; }
+  .price-grid {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem;
+    max-width: 760px; margin: 2rem auto 0; align-items: start;
+  }
   .price-card {
-    max-width: 460px; margin: 0 auto; border: 1px solid var(--line); border-radius: 22px;
+    border: 1px solid var(--line); border-radius: 22px;
     padding: 2.4rem; box-shadow: var(--shadow); background: #fff;
+  }
+  .price-card.featured { border-color: var(--accent); box-shadow: 0 10px 40px rgba(27, 67, 196, 0.18); }
+  .plan-name { font-weight: 700; font-size: 1.05rem; margin: 0 0 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+  .badge {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+    color: #fff; background: var(--accent); border-radius: 999px; padding: 0.15rem 0.55rem;
   }
   .price-head { display: flex; align-items: baseline; gap: 0.4rem; }
   .price { font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; }
   .per { color: var(--ink-soft); font-weight: 600; }
   .price-sub { color: var(--ink-soft); margin: 0.4rem 0 1.4rem; }
-  .price-card .ticks { margin-bottom: 1.8rem; }
+  .price-card .ticks { margin: 1.2rem 0 1.8rem; }
   .price-foot { text-align: center; color: var(--ink-soft); font-size: 0.88rem; margin: 0.9rem 0 0; }
+  @media (max-width: 640px) { .price-grid { grid-template-columns: 1fr; } }
 
   /* Download */
   .download { max-width: var(--max); margin: 0 auto; padding: 3rem 1.5rem 5rem; }

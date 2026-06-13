@@ -131,7 +131,7 @@ const features = [
             loop
             muted
             playsinline
-            preload="metadata"
+            preload="auto"
             poster="/video/curator-hero-poster.png"
             aria-label="Curator tidying a folder of messy downloads into clean, correctly-named files and a collection poster wall"
           >
@@ -441,4 +441,21 @@ const features = [
   // Keep the footer year current without a build step.
   const y = document.getElementById("yr");
   if (y) y.textContent = String(new Date().getFullYear());
+
+  // Nudge the hero video to autoplay. Safari/WebKit can ignore the `muted`
+  // attribute when it comes from server-rendered HTML and then block muted
+  // autoplay; forcing the property and calling play() reliably starts it.
+  const hero = document.querySelector(".hero-media video");
+  if (hero) {
+    hero.muted = true;
+    hero.playsInline = true;
+    const tryPlay = () => { const p = hero.play(); if (p) p.catch(() => {}); };
+    tryPlay();
+    hero.addEventListener("loadeddata", tryPlay, { once: true });
+    hero.addEventListener("canplay", tryPlay, { once: true });
+    // Last resort if a strict policy still blocks it: start on first interaction.
+    ["pointerdown", "touchstart", "scroll", "keydown"].forEach((e) =>
+      document.addEventListener(e, tryPlay, { once: true, passive: true }),
+    );
+  }
 </script>

@@ -1,10 +1,13 @@
 ---
 import Legal from "../layouts/Legal.astro";
-// DRAFT for solicitor / privacy review before publishing. Placeholders in
-// [BRACKETS] must be filled (legal entity, address, contact email, and confirm
-// the ICO registration position for a UK controller). Content reflects what the
-// app and licence server actually process as of this version — keep it in step
-// with the code if data handling changes.
+// DRAFT for solicitor / privacy review before publishing. Entity/email filled
+// (Neutrade Ltd, co. no. 11242313; support@yourcurator.app); geographic address
+// omitted per Stephen. ICO: no registration number cited (per Stephen), but the
+// standard "right to complain to the ICO" line is KEPT — UK GDPR Art 13(2)(d)
+// requires informing data subjects of that right. Stephen should still confirm
+// the company is registered with the ICO + pays the data-protection fee (a legal
+// requirement for most UK controllers). Content reflects what the app and licence
+// server actually process — keep it in step with the code if data handling changes.
 ---
 
 <Legal
@@ -14,9 +17,10 @@ import Legal from "../layouts/Legal.astro";
 >
   <p>
     This policy explains what personal data
-    <strong>[LEGAL ENTITY NAME]</strong> ("Curator", "we", "us") collects when you
-    use the Curator app and website, why we collect it, and your rights over it.
-    For the purposes of UK data-protection law, we are the data controller.
+    <strong>Neutrade Ltd</strong> (a company registered in England and Wales,
+    company number 11242313) ("Curator", "we", "us") collects when you use the
+    Curator app and website, why we collect it, and your rights over it. For the
+    purposes of UK data-protection law, we are the data controller.
   </p>
   <p class="note">
     <strong>The short version.</strong> Curator is built to be private by default.
@@ -91,8 +95,8 @@ import Legal from "../layouts/Legal.astro";
     <li>withdraw consent where we rely on it.</li>
   </ul>
   <p>
-    To exercise any of these, contact us at <strong>[CONTACT EMAIL]</strong>. You
-    also have the right to complain to the UK Information Commissioner's Office
+    To exercise any of these, contact us at <strong>support@yourcurator.app</strong>.
+    You also have the right to complain to the UK Information Commissioner's Office
     (ICO) at <a href="https://ico.org.uk" rel="noopener">ico.org.uk</a>, though we
     hope you will contact us first so we can help.
   </p>
@@ -113,8 +117,7 @@ import Legal from "../layouts/Legal.astro";
   <h2>9. Contact</h2>
   <p>For any privacy question or request, contact:</p>
   <address>
-    <strong>[LEGAL ENTITY NAME]</strong><br />
-    [BUSINESS ADDRESS]<br />
-    Email: <a href="mailto:[CONTACT EMAIL]">[CONTACT EMAIL]</a>
+    <strong>Neutrade Ltd</strong> (registered in England and Wales, company number 11242313)<br />
+    Email: <a href="mailto:support@yourcurator.app">support@yourcurator.app</a>
   </address>
 </Legal>

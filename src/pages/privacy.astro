@@ -1,13 +1,15 @@
 ---
 import Legal from "../layouts/Legal.astro";
 // DRAFT for solicitor / privacy review before publishing. Entity/email filled
-// (Neutrade Ltd, co. no. 11242313; support@yourcurator.app); geographic address
-// omitted per Stephen. ICO: no registration number cited (per Stephen), but the
-// standard "right to complain to the ICO" line is KEPT — UK GDPR Art 13(2)(d)
-// requires informing data subjects of that right. Stephen should still confirm
-// the company is registered with the ICO + pays the data-protection fee (a legal
-// requirement for most UK controllers). Content reflects what the app and licence
-// server actually process — keep it in step with the code if data handling changes.
+// (Neutrade Ltd, co. no. 11242313; support@yourcurator.app); postal address
+// "available on request". Data described matches what the server ACTUALLY
+// persists: email + a one-way hashed device fingerprint (+ hardware_rooted flag,
+// licence records). device_name is sent on activation but NOT stored (verified in
+// state.rs); payment/billing data sits with Paddle. ICO registration is deferred
+// (Stephen's call — to do nearer a real market); NOTE most UK controllers holding
+// customer emails commercially must register + pay the data-protection fee, so
+// revisit at/ before launch. The Art 13(2)(d) "right to complain to the ICO" line
+// is kept (required content, not a registration claim).
 ---
 
 <Legal
@@ -26,18 +28,24 @@ import Legal from "../layouts/Legal.astro";
     <strong>The short version.</strong> Curator is built to be private by default.
     Your media library stays on your own device — we never receive it. The website
     has no tracking, advertising or analytics cookies. The only personal data we
-    hold is what we need to run licences and trials and to keep online matching
-    working.
+    actually keep is your <strong>email address</strong> and a <strong>hashed
+    device identifier</strong>, both needed to run licences and trials. Your
+    payment details are handled by our payment provider, not by us.
   </p>
 
   <h2>1. The data we collect</h2>
   <h3>When you start a trial or buy a licence</h3>
   <ul>
     <li><strong>Your email address</strong> — to issue and identify your trial or licence and to provide support.</li>
-    <li><strong>A device identifier</strong> — a one-way <em>hashed</em> fingerprint of your computer. We never receive the raw hardware identifiers it is derived from; we use it only to enforce the device limit and to prevent trial abuse. We also record whether that identifier is hardware-rooted (a yes/no signal) for the same purpose.</li>
-    <li><strong>A device name</strong> — usually your computer's name, which may include a name you chose. It helps you recognise your own activations.</li>
+    <li><strong>A hashed device identifier</strong> — a one-way <em>hashed</em> fingerprint of your computer. We never receive the raw hardware identifiers it is derived from; we use it only to enforce the device limit and to prevent trial abuse. We also record whether that identifier is hardware-rooted (a yes/no signal) for the same purpose.</li>
     <li><strong>Licence records</strong> — your plan, issue and expiry dates, and activation history.</li>
   </ul>
+  <p>
+    When you activate, the app also sends your computer's name (so an activation
+    is recognisable), but <strong>we do not store it</strong>. We do not collect
+    your real name; any name on your receipt is held by our payment provider, not
+    by us.
+  </p>
   <h3>When you pay</h3>
   <ul>
     <li>Payments are processed by <strong>Paddle</strong>, our reseller and merchant of record. Paddle collects your payment details directly — <strong>we never see or store your full card details</strong>. Paddle shares limited order information with us (such as your email, country for tax purposes, and an order reference).</li>
@@ -118,6 +126,7 @@ import Legal from "../layouts/Legal.astro";
   <p>For any privacy question or request, contact:</p>
   <address>
     <strong>Neutrade Ltd</strong> (registered in England and Wales, company number 11242313)<br />
+    Postal address available on request.<br />
     Email: <a href="mailto:support@yourcurator.app">support@yourcurator.app</a>
   </address>
 </Legal>

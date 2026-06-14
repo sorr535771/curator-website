@@ -1,0 +1,178 @@
+---
+// Shared layout for the legal pages (/terms, /privacy). Reuses the homepage
+// brand tokens, nav and footer, with a readable prose container for long-form
+// text. Pass `title`, `description` and `updated` (a human date string).
+interface Props {
+  title: string;
+  description: string;
+  updated: string;
+}
+const { title, description, updated } = Astro.props;
+const siteUrl = "https://yourcurator.app";
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{title} — Curator</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={`${siteUrl}${Astro.url.pathname}`} />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+    <a class="skip" href="#doc">Skip to content</a>
+
+    <header class="nav">
+      <a class="brand" href="/">
+        <img src="/logo.png" width="28" height="28" alt="" />
+        <span>Curator</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/#download">Download</a>
+        <a class="btn btn-sm" href="/#download">Free trial</a>
+      </nav>
+    </header>
+
+    <main id="doc" class="legal">
+      <p class="eyebrow">Legal</p>
+      <h1>{title}</h1>
+      <p class="updated">Last updated: {updated}</p>
+      <div class="prose">
+        <slot />
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="foot-top">
+        <a class="brand" href="/">
+          <img src="/logo.png" width="24" height="24" alt="" />
+          <span>Curator</span>
+        </a>
+        <nav class="foot-links">
+          <a href="/#features">Features</a>
+          <a href="/#pricing">Pricing</a>
+          <a href="/#download">Download</a>
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
+      </div>
+      <p class="attrib">
+        Metadata and artwork from
+        <a href="https://www.themoviedb.org" rel="noopener">TheMovieDB</a>,
+        <a href="https://thetvdb.com" rel="noopener">TheTVDB</a> and
+        <a href="https://trakt.tv" rel="noopener">Trakt</a>. This product uses the
+        TMDB API but is not endorsed or certified by TMDB.
+      </p>
+      <p class="copy">© <span id="yr">2026</span> Curator. All rights reserved.</p>
+    </footer>
+
+    <script is:inline>
+      // Keep the footer year current without a build step.
+      document.getElementById("yr").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #ffffff;
+    --ink: #14141a;
+    --ink-soft: #5b5b66;
+    --line: #ececf1;
+    --accent: #2f6bff;
+    --radius: 16px;
+    --max: 1120px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; margin: 0; }
+
+  .skip { position: absolute; left: -999px; }
+  .skip:focus { left: 1rem; top: 1rem; background: #fff; padding: 0.5rem 1rem; z-index: 99; }
+
+  .eyebrow {
+    text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.78rem;
+    font-weight: 600; color: var(--accent); margin: 0 0 0.6rem;
+  }
+
+  /* Buttons (subset of the homepage) */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent); color: #fff; font-weight: 600;
+    padding: 0.7rem 1.25rem; border-radius: 999px;
+    transition: transform 0.12s ease, background 0.2s ease;
+    border: 1px solid transparent; white-space: nowrap;
+  }
+  .btn:hover { background: #2257e0; transform: translateY(-1px); text-decoration: none; }
+  .btn-sm { padding: 0.5rem 1rem; font-size: 0.92rem; }
+
+  /* Nav */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--max); margin: 0 auto; padding: 0.9rem 1.5rem;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--ink); }
+  .brand:hover { text-decoration: none; }
+  .nav-links { display: flex; align-items: center; gap: 1.4rem; }
+  .nav-links a { color: var(--ink-soft); font-weight: 500; }
+  .nav-links a:hover { color: var(--ink); text-decoration: none; }
+  .nav-links a.btn { color: #fff; }
+
+  /* Legal prose */
+  .legal { max-width: 760px; margin: 0 auto; padding: 3.5rem 1.5rem 1rem; }
+  .legal h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+  .updated { color: var(--ink-soft); font-size: 0.92rem; margin: 0.6rem 0 2.2rem; }
+  .prose { font-size: 1.02rem; color: #2a2a33; }
+  .prose h2 {
+    font-size: 1.3rem; margin: 2.4rem 0 0.4rem; padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+  }
+  .prose h2:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+  .prose h3 { font-size: 1.05rem; margin: 1.6rem 0 0.3rem; }
+  .prose p { margin: 0.7rem 0; }
+  .prose ul { margin: 0.7rem 0; padding-left: 1.2rem; }
+  .prose li { margin: 0.35rem 0; }
+  .prose strong { color: var(--ink); }
+  .prose .note {
+    background: #f5f7ff; border: 1px solid #dfe6ff; border-radius: var(--radius);
+    padding: 1rem 1.1rem; margin: 1.4rem 0; font-size: 0.96rem;
+  }
+  .prose address { font-style: normal; }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--line); padding: 3rem 1.5rem; max-width: var(--max); margin: 3rem auto 0; }
+  .foot-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .foot-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .foot-links a { color: var(--ink-soft); font-weight: 500; }
+  .foot-links a:hover { color: var(--ink); text-decoration: none; }
+  .attrib { color: var(--ink-soft); font-size: 0.86rem; margin: 1.6rem 0 0.4rem; }
+  .copy { color: var(--ink-soft); font-size: 0.86rem; margin: 0.2rem 0 0; }
+
+  @media (max-width: 640px) {
+    .nav-links { gap: 0.9rem; }
+    .nav-links a:not(.btn) { display: none; }
+  }
+</style>

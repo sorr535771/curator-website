@@ -1,0 +1,120 @@
+---
+import Legal from "../layouts/Legal.astro";
+// DRAFT for solicitor / privacy review before publishing. Placeholders in
+// [BRACKETS] must be filled (legal entity, address, contact email, and confirm
+// the ICO registration position for a UK controller). Content reflects what the
+// app and licence server actually process as of this version — keep it in step
+// with the code if data handling changes.
+---
+
+<Legal
+  title="Privacy Policy"
+  description="What personal data Curator collects, why, who we share it with, and the rights you have over it."
+  updated="14 June 2026"
+>
+  <p>
+    This policy explains what personal data
+    <strong>[LEGAL ENTITY NAME]</strong> ("Curator", "we", "us") collects when you
+    use the Curator app and website, why we collect it, and your rights over it.
+    For the purposes of UK data-protection law, we are the data controller.
+  </p>
+  <p class="note">
+    <strong>The short version.</strong> Curator is built to be private by default.
+    Your media library stays on your own device — we never receive it. The website
+    has no tracking, advertising or analytics cookies. The only personal data we
+    hold is what we need to run licences and trials and to keep online matching
+    working.
+  </p>
+
+  <h2>1. The data we collect</h2>
+  <h3>When you start a trial or buy a licence</h3>
+  <ul>
+    <li><strong>Your email address</strong> — to issue and identify your trial or licence and to provide support.</li>
+    <li><strong>A device identifier</strong> — a one-way <em>hashed</em> fingerprint of your computer. We never receive the raw hardware identifiers it is derived from; we use it only to enforce the device limit and to prevent trial abuse. We also record whether that identifier is hardware-rooted (a yes/no signal) for the same purpose.</li>
+    <li><strong>A device name</strong> — usually your computer's name, which may include a name you chose. It helps you recognise your own activations.</li>
+    <li><strong>Licence records</strong> — your plan, issue and expiry dates, and activation history.</li>
+  </ul>
+  <h3>When you pay</h3>
+  <ul>
+    <li>Payments are processed by <strong>Paddle</strong>, our reseller and merchant of record. Paddle collects your payment details directly — <strong>we never see or store your full card details</strong>. Paddle shares limited order information with us (such as your email, country for tax purposes, and an order reference).</li>
+  </ul>
+  <h3>When the app matches your files</h3>
+  <ul>
+    <li>To look up titles, episodes, artwork and ratings, the app sends only the <strong>parsed name details of a file</strong> (such as a guessed title, season and episode number) and the media type, through our matching service to the data providers. <strong>It does not send your file paths, your filenames in full, your library, or your email.</strong></li>
+  </ul>
+  <h3>The website and updates</h3>
+  <ul>
+    <li>Our website uses <strong>no tracking, advertising or analytics cookies</strong>. Our hosting provider may process standard, short-lived server logs (such as IP addresses) to deliver and secure the site.</li>
+    <li>When the app checks for or downloads updates, that request goes to our update host, which will see your IP address as part of delivering the download.</li>
+  </ul>
+
+  <h2>2. Why we use it, and our legal basis</h2>
+  <ul>
+    <li><strong>To provide the Service</strong> (issuing trials and licences, activating devices, running online matching) — this is necessary to perform our contract with you.</li>
+    <li><strong>To prevent abuse and keep the Service secure</strong> (enforcing the device limit, detecting trial-cycling, protecting our data providers) — this is in our legitimate interests, balanced against your privacy by using a hashed identifier and the minimum data needed.</li>
+    <li><strong>To meet legal and tax obligations</strong> (record-keeping for sales), via Paddle as merchant of record.</li>
+  </ul>
+
+  <h2>3. Who we share it with</h2>
+  <p>We do not sell your personal data. We share it only with service providers who help us run Curator:</p>
+  <ul>
+    <li><strong>Paddle</strong> — payment processing and tax (merchant of record).</li>
+    <li><strong>Cloudflare</strong> — website and service hosting and security.</li>
+    <li><strong>GitHub</strong> — hosting app downloads and updates.</li>
+    <li><strong>TheTVDB, TheMovieDB and Trakt</strong> — the data providers that answer matching requests (they receive only the parsed name details described above).</li>
+    <li>If we add email verification for trials in future, a transactional email provider — we will update this policy first.</li>
+  </ul>
+
+  <h2>4. International transfers</h2>
+  <p>
+    Some of these providers are based outside the UK. Where your data is
+    transferred outside the UK, we rely on appropriate safeguards (such as a UK
+    adequacy decision or standard contractual clauses) so that it remains
+    protected.
+  </p>
+
+  <h2>5. How long we keep it</h2>
+  <ul>
+    <li>Licence and activation records are kept for as long as your licence is active and for a reasonable period afterwards for support, tax and fraud-prevention.</li>
+    <li>The trial-abuse record (the hashed device identifier against a trial) is kept for as long as necessary to prevent repeat trial abuse.</li>
+    <li>Payment and tax records are kept by Paddle in line with their obligations.</li>
+  </ul>
+
+  <h2>6. Your rights</h2>
+  <p>Under UK data-protection law you have the right to:</p>
+  <ul>
+    <li>access the personal data we hold about you;</li>
+    <li>have inaccurate data corrected;</li>
+    <li>have your data erased, where applicable;</li>
+    <li>restrict or object to certain processing;</li>
+    <li>receive your data in a portable format; and</li>
+    <li>withdraw consent where we rely on it.</li>
+  </ul>
+  <p>
+    To exercise any of these, contact us at <strong>[CONTACT EMAIL]</strong>. You
+    also have the right to complain to the UK Information Commissioner's Office
+    (ICO) at <a href="https://ico.org.uk" rel="noopener">ico.org.uk</a>, though we
+    hope you will contact us first so we can help.
+  </p>
+
+  <h2>7. Children</h2>
+  <p>
+    Curator is not directed at children, and we do not knowingly collect personal
+    data from anyone under 16.
+  </p>
+
+  <h2>8. Changes to this policy</h2>
+  <p>
+    We may update this policy as the Service evolves. Where changes are
+    significant we will give reasonable notice. The "last updated" date above
+    shows when it last changed.
+  </p>
+
+  <h2>9. Contact</h2>
+  <p>For any privacy question or request, contact:</p>
+  <address>
+    <strong>[LEGAL ENTITY NAME]</strong><br />
+    [BUSINESS ADDRESS]<br />
+    Email: <a href="mailto:[CONTACT EMAIL]">[CONTACT EMAIL]</a>
+  </address>
+</Legal>

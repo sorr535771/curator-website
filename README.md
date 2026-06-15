@@ -38,8 +38,9 @@ Everything below is marked with `PLACEHOLDER` comments in the code.
 | What | Where | Notes |
 |------|-------|-------|
 | ~~Pricing~~ ✅ DONE | `src/pages/index.astro` → `yearlyPrice` / `lifetimePrice` | Yearly $9.99/yr + Lifetime $80 (current major only). |
+| **`support@yourcurator.app` email routing** | Cloudflare dashboard → **Email → Email Routing** | ⚠️ REQUIRED. The `/contact` page and the privacy policy both point at `support@yourcurator.app`. Until a Cloudflare Email Routing rule forwards it to a real inbox, those emails bounce. Free; no code change. |
 | **Download links** | `index.astro` → the three `#` hrefs in the Download + hero sections | Point at the signed installers (host on **GitHub Releases** or Cloudflare R2). |
-| **Buy / subscribe (Paddle)** | the "Start free trial" / pricing CTA | Right now everything points to the trial download. When Paddle is live, add its JS snippet (`<script src="…paddle.js">`) and wire `Paddle.Checkout.open({ items: […] })` for both the yearly and lifetime plans. |
+| **Buy / subscribe (Paddle)** | `index.astro` frontmatter (`paddleEnv` / `paddleToken` / price ids) + the Paddle `<script>` at the bottom + the `.buy` buttons | ⚠️ BUILT BUT HELD BACK. The production checkout wiring exists and was tested, but is kept **uncommitted locally** (not in git, not deployed) until Paddle verifies the account + approves the `yourcurator.app` domain — otherwise live visitors hit a broken checkout. Commit + push it once Paddle is verified. |
 | ~~Domain~~ ✅ DONE | `astro.config.mjs` → `site` | Set to `https://yourcurator.app`; canonical + absolute `og:`/`twitter:` URLs derive from it. |
 | **OG / social image** | `index.astro` `og:image` | Currently reuses a collection screenshot; a dedicated 1200×630 card is nicer. |
 | **Logo / favicon** | `public/logo.png`, `public/favicon.png` | Using the app icon — fine, but a wordmark could be added. |

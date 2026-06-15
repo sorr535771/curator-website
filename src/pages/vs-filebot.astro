@@ -1,0 +1,177 @@
+---
+import Legal from "../layouts/Legal.astro";
+// "Curator vs FileBot" comparison page. Targets the main search term for this
+// app ("FileBot alternative") and is the kind of page that earns links. Kept
+// honest — FileBot is a capable, long-established tool, and the page says where
+// it still wins (CLI/scripting automation, music & anime, track record).
+type Row = { feature: string; curator: string; filebot: string };
+const rows: Row[] = [
+  { feature: "Built with", curator: "Native Rust app, around 12 MB", filebot: "Java (runs on the JVM), larger download" },
+  { feature: "Interface", curator: "Modern, Apple-like, light and dark", filebot: "Functional and utilitarian" },
+  { feature: "Platforms", curator: "macOS, Windows, Linux", filebot: "macOS, Windows, Linux" },
+  { feature: "Metadata sources", curator: "TheTVDB, TheMovieDB, Trakt", filebot: "TheTVDB, TheMovieDB, AniDB and more" },
+  { feature: "Matching", curator: "Automatic, with a confidence score and a poster picker when it's unsure", filebot: "Automatic, with manual override" },
+  { feature: "Collection / poster wall", curator: "Yes — a browsable library", filebot: "No — a renamer only" },
+  { feature: "Completion tracking", curator: "Yes — % owned and a missing-episodes report", filebot: "No" },
+  { feature: "Presentation mode", curator: "Yes — full-screen poster slideshow", filebot: "No" },
+  { feature: "Command line & scripting", curator: "Not yet", filebot: "Yes — a powerful CLI and format scripting" },
+  { feature: "Music & anime renaming", curator: "Focused on TV and film", filebot: "Yes — broader format support" },
+  { feature: "Licensing", curator: "Offline-verifiable, 2 computers, no phone-home lockout", filebot: "Paid licence required" },
+  { feature: "Track record", curator: "New in 2026", filebot: "Long-established" },
+];
+
+const faq = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Is Curator a good FileBot alternative?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Curator does the same core job as FileBot — turning messy media filenames into clean, correctly-named files — in a fast, native app with a modern interface. It adds a browsable collection, completion tracking and a missing-episodes report. FileBot still has the edge on command-line automation, scripting, and music and anime support.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does Curator run on Mac, Windows and Linux like FileBot?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Curator is a native desktop app for macOS, Windows and Linux. Unlike FileBot it does not bundle a Java runtime, so the download is small (around 12 MB) and it opens instantly.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How much does Curator cost compared with FileBot?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Curator is $9.99 a year or $80 once for the current major version, and there is a 14-day free trial with no card required. Each licence works on two of your computers.",
+      },
+    },
+  ],
+};
+---
+
+<Legal
+  title="Curator vs FileBot"
+  eyebrow="Comparison"
+  description="How Curator compares with FileBot for renaming and organising your media — a fast, native FileBot alternative for macOS, Windows and Linux."
+>
+  <p>
+    FileBot has been the go-to tool for renaming media files for years, and it's
+    genuinely good at it. Curator does the same core job — cryptic filenames in,
+    clean correctly-named files out — but as a fast native app with a modern
+    interface, and it carries on past the rename into a collection you'll actually
+    open for fun. Here's an honest comparison so you can pick the right one.
+  </p>
+
+  <div class="cmp-wrap">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Curator</th>
+          <th>FileBot</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r) => (
+            <tr>
+              <th scope="row">{r.feature}</th>
+              <td>{r.curator}</td>
+              <td>{r.filebot}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Where Curator is different</h2>
+  <p>
+    Curator is built in Rust as a real installed app, so it's small and quick
+    rather than a packaged web browser or a Java program waiting on a runtime. The
+    matching shows a confidence score for every file and, when it isn't sure, lets
+    you pick from a wall of posters instead of guessing. Everything you file lands
+    in a collection with quality badges and ratings, and Curator can tell you which
+    episodes of a season you're still missing.
+  </p>
+  <p>
+    Licensing is deliberately gentle. Your licence is verified on your own machine,
+    so the app doesn't lock you out when it can't phone home — a common frustration
+    with software that checks in constantly. One licence covers two of your
+    computers, and you can move it between them.
+  </p>
+
+  <h2>Where FileBot still wins</h2>
+  <p>
+    Honesty matters more than a sales pitch, so: if you want to automate renaming
+    from a script or a watch folder, FileBot's command line and format expressions
+    are excellent and Curator doesn't match them yet. FileBot also handles music
+    and anime libraries and a wider set of sources, and it has years of real-world
+    use behind it. If those things are central to how you work, FileBot is the
+    better fit today.
+  </p>
+
+  <h2>So which should you choose?</h2>
+  <p>
+    If you want a tidy, native app that names your TV and films correctly and turns
+    your library into something worth browsing, Curator is built for you. If you
+    live on the command line or need music and anime support, stay with FileBot.
+    Curator has a 14-day free trial with no card required, so the easiest answer is
+    to try it on your own messy folder.
+  </p>
+
+  <p class="cmp-cta">
+    <a class="btn" href="/#download">Download the free trial</a>
+    <a class="btn btn-ghost" href="/#features">See the features</a>
+  </p>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faq)} is:inline />
+</Legal>
+
+<style>
+  .cmp-wrap { overflow-x: auto; margin: 1.8rem 0; }
+  table.cmp {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.96rem;
+    min-width: 560px;
+  }
+  table.cmp th,
+  table.cmp td {
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.cmp thead th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    border-bottom: 2px solid var(--line);
+  }
+  table.cmp tbody th[scope="row"] {
+    font-weight: 600;
+    color: var(--ink);
+    width: 28%;
+  }
+  table.cmp tbody td { color: var(--ink-soft); }
+  table.cmp thead th:nth-child(2),
+  table.cmp tbody td:first-of-type { color: var(--ink); }
+  .cmp-cta {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 1.8rem;
+  }
+  .cmp-cta .btn:hover { text-decoration: none; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .btn-ghost:hover { background: #f5f5f8; }
+</style>

@@ -1,0 +1,103 @@
+---
+import Legal from "../layouts/Legal.astro";
+// Contact page. Deliberately a mailto, not a form — the site is static on
+// Cloudflare Pages with no backend, so there's nothing to receive a POST.
+// support@yourcurator.app is the published support address (also used in the
+// privacy policy); set up Cloudflare Email Routing to forward it to a real inbox.
+const email = "support@yourcurator.app";
+const reasons = [
+  {
+    label: "Help & support",
+    body: "Something not working, or a question about using Curator? Tell us what you're seeing — your operating system and the version of Curator help us answer faster.",
+    subject: "Curator support",
+    cta: "Email support",
+  },
+  {
+    label: "Buying & licences",
+    body: "Questions about pricing, the yearly vs lifetime plans, moving a licence between computers, or an invoice for your records.",
+    subject: "Curator — buying & licences",
+    cta: "Email about a purchase",
+  },
+  {
+    label: "Press & partnerships",
+    body: "Writing about Curator, or interested in working together? Get in touch and we'll come back to you.",
+    subject: "Curator — press / partnership",
+    cta: "Email the team",
+  },
+];
+const mailto = (subject: string) =>
+  `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+---
+
+<Legal
+  title="Contact us"
+  eyebrow="Contact"
+  description="Get in touch with the Curator team — support, billing questions, press and partnerships."
+>
+  <p>
+    The quickest way to reach us is email. Write to
+    <a href={mailto("Curator")}>{email}</a> and a real person will read it. We
+    aim to reply within two working days.
+  </p>
+
+  <div class="contact-grid">
+    {
+      reasons.map((r) => (
+        <div class="contact-card">
+          <h2>{r.label}</h2>
+          <p>{r.body}</p>
+          <a class="btn" href={mailto(r.subject)}>
+            {r.cta}
+          </a>
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="note">
+    Curator keeps your media library on your own device, so we usually can't see
+    your files or collection. When you write in, please include anything that
+    helps us picture the problem — what you did, what you expected, and what
+    happened instead.
+  </p>
+
+  <p>
+    Looking for the legal detail instead? See our
+    <a href="/terms">Terms &amp; Conditions</a> and
+    <a href="/privacy">Privacy Policy</a>.
+  </p>
+</Legal>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.8rem 0;
+  }
+  .contact-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .contact-card h2 {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem;
+    padding: 0;
+    border: none;
+  }
+  .contact-card p {
+    color: var(--ink-soft);
+    font-size: 0.96rem;
+    margin: 0 0 1.2rem;
+    flex: 1 0 auto;
+  }
+  .contact-card .btn {
+    align-self: flex-start;
+  }
+  .contact-card .btn:hover {
+    text-decoration: none;
+  }
+</style>

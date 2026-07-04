@@ -9,13 +9,16 @@ const rows: Row[] = [
   { feature: "Built with", curator: "Native Rust app, around 12 MB", filebot: "Java (runs on the JVM), larger download" },
   { feature: "Interface", curator: "Modern, Apple-like, light and dark", filebot: "Functional and utilitarian" },
   { feature: "Platforms", curator: "macOS, Windows, Linux", filebot: "macOS, Windows, Linux" },
-  { feature: "Metadata sources", curator: "TheTVDB, TheMovieDB, Trakt", filebot: "TheTVDB, TheMovieDB, AniDB and more" },
+  { feature: "Metadata sources", curator: "TheTVDB, TheMovieDB, Trakt, AniDB", filebot: "TheTVDB, TheMovieDB, AniDB and more" },
   { feature: "Matching", curator: "Automatic, with a confidence score and a poster picker when it's unsure", filebot: "Automatic, with manual override" },
   { feature: "Collection / poster wall", curator: "Yes — a browsable library", filebot: "No — a renamer only" },
   { feature: "Completion tracking", curator: "Yes — % owned and a missing-episodes report", filebot: "No" },
   { feature: "Presentation mode", curator: "Yes — full-screen poster slideshow", filebot: "No" },
-  { feature: "Command line & scripting", curator: "Not yet", filebot: "Yes — a powerful CLI and format scripting" },
-  { feature: "Music & anime renaming", curator: "Focused on TV and film", filebot: "Yes — broader format support" },
+  { feature: "Automation", curator: "Yes — watch folders, scheduled scans, Plex/Jellyfin/Emby refresh, webhooks & hooks", filebot: "Yes — via the CLI and scripts" },
+  { feature: "Command line & scripting", curator: "Yes — a CLI and rhai scripting/macros (newer)", filebot: "Yes — a powerful CLI and format scripting, long-proven" },
+  { feature: "Anime renaming", curator: "Yes — AniDB hash matching, absolute-numbering, preferred fansub group", filebot: "Yes — long-established anime support" },
+  { feature: "Music renaming", curator: "No — focused on TV and film", filebot: "Yes" },
+  { feature: "Free tier", curator: "Yes — renaming is free forever, no account", filebot: "No — paid/donation-gated" },
   { feature: "Licensing", curator: "Offline-verifiable, 2 computers, no phone-home lockout", filebot: "Paid licence required" },
   { feature: "Track record", curator: "New in 2026", filebot: "Long-established" },
 ];
@@ -29,7 +32,7 @@ const faq = {
       name: "Is Curator a good FileBot alternative?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Curator does the same core job as FileBot — turning messy media filenames into clean, correctly-named files — in a fast, native app with a modern interface. It adds a browsable collection, completion tracking and a missing-episodes report. FileBot still has the edge on command-line automation, scripting, and music and anime support.",
+        text: "Yes. Curator does the same core job as FileBot — turning messy media filenames into clean, correctly-named files — in a fast, native app with a modern interface, and renaming is free forever. It adds a browsable collection, completion tracking, a missing-episodes report, automation and anime support. FileBot still has the edge on deep command-line automation and scripting, and it renames music, which Curator doesn't.",
       },
     },
     {
@@ -45,7 +48,7 @@ const faq = {
       name: "How much does Curator cost compared with FileBot?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Curator is $9.99 a year or $80 once for the current major version, and there is a 14-day free trial with no card required. Each licence works on two of your computers.",
+        text: "Curator is free to rename, forever — no account or card. Premium unlocks online matching, the collection and the power features for $9.99 a year or $80 once for the current major version, with a 14-day Premium trial (no card required). Each paid licence works on two of your computers.",
       },
     },
   ],
@@ -106,11 +109,11 @@ const faq = {
 
   <h2>Where FileBot still wins</h2>
   <p>
-    Honesty matters more than a sales pitch, so: if you want to automate renaming
-    from a script or a watch folder, FileBot's command line and format expressions
-    are excellent and Curator doesn't match them yet. FileBot also handles music
-    and anime libraries and a wider set of sources, and it has years of real-world
-    use behind it. If those things are central to how you work, FileBot is the
+    Honesty matters more than a sales pitch, so: Curator now has a CLI, scripting
+    and watch folders of its own, but FileBot's command line and format expressions
+    are more powerful and have years of real-world use behind them. FileBot also
+    renames music libraries, which Curator doesn't, and draws on a wider set of
+    sources. If deep scripting or music is central to how you work, FileBot is the
     better fit today.
   </p>
 
@@ -118,13 +121,13 @@ const faq = {
   <p>
     If you want a tidy, native app that names your TV and films correctly and turns
     your library into something worth browsing, Curator is built for you. If you
-    live on the command line or need music and anime support, stay with FileBot.
-    Curator has a 14-day free trial with no card required, so the easiest answer is
-    to try it on your own messy folder.
+    live deep in the command line or need music support, stay with FileBot. Curator
+    is free to rename forever, so the easiest answer is to try it on your own messy
+    folder.
   </p>
 
   <p class="cmp-cta">
-    <a class="btn" href="/#download">Download the free trial</a>
+    <a class="btn" href="/#download">Download free</a>
     <a class="btn btn-ghost" href="/#features">See the features</a>
   </p>
 

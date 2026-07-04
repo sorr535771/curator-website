@@ -5,11 +5,18 @@
 const yearlyPrice = "$9.99"; // yearly subscription
 const lifetimePrice = "$80"; // one-time, current major version only
 const trialDays = 14;
+// Paddle checkout — LIVE/production values (account verified, accepting real
+// payments). Ensure the yourcurator.app domain stays approved in the Paddle
+// dashboard so the hosted checkout keeps loading.
+const paddleEnv = "production";
+const paddleToken = "live_a5cec268b42f7c3810b9aa81b3d";
+const yearlyPriceId = "pri_01kv3p9gv7hj74njs8e3448t13";
+const lifetimePriceId = "pri_01kv3paynp2j0jeagp6jn2e34f";
 const siteUrl = "https://yourcurator.app";
 const ogImage = `${siteUrl}/og-card.png`; // absolute — social scrapers need a full URL
 // Numeric prices for the structured-data offers (Schema.org wants a bare number +
 // currency, not the "$9.99" display strings above). Keep these in step with the
-// display prices.
+// display prices and the Paddle price ids.
 const yearlyPriceValue = "9.99";
 const lifetimePriceValue = "80";
 const priceCurrency = "USD";
@@ -47,6 +54,14 @@ const structuredData = {
         "Curator renames messy media downloads into clean, correctly-named files and files them into a browsable collection. A fast, native desktop app and a modern FileBot alternative.",
       publisher: { "@id": `${siteUrl}/#org` },
       offers: [
+        {
+          "@type": "Offer",
+          name: "Free",
+          price: "0",
+          priceCurrency,
+          description: "Rename and organise your media, free forever. No account, no card, no expiry.",
+          url: `${siteUrl}/#pricing`,
+        },
         {
           "@type": "Offer",
           name: "Yearly",
@@ -130,6 +145,58 @@ const features: Feature[] = [
     alt: "Curator's settings — placement, folder, database and theme defaults",
     bullets: ["Folder structure on or off — preview updates live", "Move · Copy · Overwrite", "One-click undo, never clobbers a file"],
   },
+  {
+    id: "health",
+    eyebrow: "Know your library",
+    title: "A health check for your whole collection.",
+    body:
+      "Curator scans everything you've filed and tells you what needs attention — broken paths, unmatched files, gaps in a season, missing metadata — in a single pass. Then it breaks your storage down by decade, resolution and content type, and lists your biggest files so you can see where the space is going.",
+    slides: ["/img/health-light.png", "/img/storage-light.png"],
+    alt: "Curator's library-health dashboard and storage analytics",
+    bullets: ["Broken paths, unmatched files and missing episodes at a glance", "Storage by decade, resolution and content type", "Find your largest files and bloated encodes"],
+  },
+];
+
+// Secondary features — shown as a compact grid rather than full alternating
+// blocks. These are the power features that live in settings/panels; the grid
+// keeps them visible without six near-identical form screenshots.
+type MoreFeature = { icon: string; title: string; body: string };
+const moreFeatures: MoreFeature[] = [
+  {
+    icon:
+      '<path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/>',
+    title: "Automation",
+    body:
+      "Watch a downloads folder and Curator files new media the moment it lands. Scheduled scans, automatic Plex / Jellyfin / Emby refresh, plus webhooks and hooks for Sonarr, qBittorrent and your own scripts.",
+  },
+  {
+    icon:
+      '<polyline points="20 6 9 17 4 12"/><path d="M14 4h6v6" opacity=".45"/>',
+    title: "Smart organisation",
+    body:
+      "Duplicate detection spots the same episode filed twice — keep the highest quality automatically. Quality-upgrade prompts, custom folder templates and rule-based routing keep everything tidy.",
+  },
+  {
+    icon:
+      '<rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="15" x2="11" y2="15"/><line x1="14" y1="15" x2="17" y2="15"/>',
+    title: "Subtitles, NFO & artwork",
+    body:
+      "Auto-download subtitles in your languages from OpenSubtitles, write NFO sidecars, and embed poster art into your files with ffmpeg — ready for Plex, Kodi and Jellyfin.",
+  },
+  {
+    icon:
+      '<polygon points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/><line x1="12" y1="12" x2="12" y2="21" opacity=".45"/>',
+    title: "Anime, done right",
+    body:
+      "AniDB exact-hash matching, absolute-numbered shows like One Piece and Bleach named correctly, and preferred fansub-group handling when you have more than one copy.",
+  },
+  {
+    icon:
+      '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+    title: "Power tools",
+    body:
+      "Persistent history with multi-batch undo, multiple profiles for different libraries, a command line, and rhai scripting macros for when you want the last word on a name.",
+  },
 ];
 ---
 
@@ -182,7 +249,7 @@ const features: Feature[] = [
         <a href="#pricing">Pricing</a>
         <a href="#download">Download</a>
         <a href="/contact">Contact</a>
-        <a class="btn btn-sm" href="#download">Free trial</a>
+        <a class="btn btn-sm" href="#download">Download free</a>
       </nav>
     </header>
 
@@ -197,10 +264,10 @@ const features: Feature[] = [
           Windows and Linux. No browser in disguise, no Java.
         </p>
         <div class="cta-row">
-          <a class="btn btn-lg" href="#download">Download free trial</a>
-          <a class="btn btn-lg btn-ghost" href="#matching">See how it works</a>
+          <a class="btn btn-lg" href="#download">Download free</a>
+          <a class="btn btn-lg btn-ghost" href="#pricing">See Premium</a>
         </div>
-        <p class="cta-note">{trialDays}-day free trial · no card required</p>
+        <p class="cta-note">Free to rename, forever · {trialDays}-day Premium trial, no card required</p>
 
         <div class="hero-media">
           <video
@@ -250,6 +317,23 @@ const features: Feature[] = [
         }
       </section>
 
+      <!-- MORE FEATURES (compact grid) -->
+      <section class="more">
+        <p class="eyebrow center">And a lot more</p>
+        <h2 class="center">Everything else a power library needs.</h2>
+        <div class="more-grid">
+          {
+            moreFeatures.map((m) => (
+              <div class="more-card">
+                <svg class="more-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={m.icon} />
+                <h3>{m.title}</h3>
+                <p>{m.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
       <!-- NATIVE / TRUST STRIP -->
       <section class="strip">
         <div class="strip-grid">
@@ -275,38 +359,57 @@ const features: Feature[] = [
       <!-- PRICING -->
       <section id="pricing" class="pricing">
         <p class="eyebrow center">Pricing</p>
-        <h2 class="center">Pick how you pay. Same Curator.</h2>
-        <p class="price-sub center">Start with a {trialDays}-day free trial — no card required.</p>
+        <h2 class="center">Free to rename. Premium for the rest.</h2>
+        <p class="price-sub center">Renaming is free forever. Try everything else free for {trialDays} days — no card required — then stay on Free or upgrade.</p>
         <div class="price-grid">
           <div class="price-card">
-            <p class="plan-name">Yearly</p>
+            <p class="plan-name">Free</p>
+            <div class="price-head">
+              <span class="price">$0</span>
+              <span class="per">forever</span>
+            </div>
+            <ul class="ticks">
+              <li>Rename TV, film &amp; anime with live preview</li>
+              <li>Smart, TV and Movie presets</li>
+              <li>Move, copy &amp; safe renames — one-click undo</li>
+              <li>Offline filename parsing</li>
+              <li>No account, no card, no expiry</li>
+            </ul>
+            <a class="btn btn-lg full btn-ghost" href="#download">Download free</a>
+            <p class="price-foot">Yours to keep. Upgrade any time.</p>
+          </div>
+          <div class="price-card">
+            <p class="plan-name">Premium Yearly</p>
             <div class="price-head">
               <span class="price">{yearlyPrice}</span>
               <span class="per">/ year</span>
             </div>
             <ul class="ticks">
-              <li>Unlimited renaming and organising</li>
+              <li>Everything in Free, plus:</li>
               <li>Live matching via TheTVDB, TheMovieDB &amp; Trakt</li>
               <li>The full collection, completion tracking &amp; presentation mode</li>
-              <li>Use it on 2 of your computers</li>
-              <li>Every update while you're subscribed</li>
+              <li>Automation, duplicate &amp; quality-upgrade detection, health reports</li>
+              <li>Subtitles, NFO &amp; artwork, anime, CLI &amp; scripting</li>
+              <li>Use it on 2 of your computers · every update while subscribed</li>
             </ul>
-            <a class="btn btn-lg full" href="#download">Start free trial</a>
+            <button class="btn btn-lg full buy" data-price={yearlyPriceId}>Buy yearly</button>
+            <a class="btn btn-lg full btn-ghost" href="#download">Start free trial</a>
             <p class="price-foot">Then {yearlyPrice}/year. Cancel any time.</p>
           </div>
           <div class="price-card featured">
-            <p class="plan-name">Lifetime <span class="badge">Best value</span></p>
+            <p class="plan-name">Premium Lifetime <span class="badge">Best value</span></p>
             <div class="price-head">
               <span class="price">{lifetimePrice}</span>
               <span class="per">once</span>
             </div>
             <ul class="ticks">
-              <li>Everything in Yearly</li>
+              <li>Everything in Premium Yearly</li>
               <li>Pay once — no renewals</li>
               <li>Free updates for the current major version</li>
               <li>Use it on 2 of your computers</li>
             </ul>
-            <a class="btn btn-lg full" href="#download">Start free trial</a>
+            <button class="btn btn-lg full buy" data-price={lifetimePriceId}>Buy lifetime</button>
+            <a class="btn btn-lg full btn-ghost" href="#download">Start free trial</a>
             <p class="price-foot">One payment of {lifetimePrice}. Covers all of the current major version.</p>
           </div>
         </div>
@@ -315,7 +418,7 @@ const features: Feature[] = [
       <!-- DOWNLOAD -->
       <section id="download" class="download">
         <h2 class="center">Get Curator</h2>
-        <p class="center muted">Free for {trialDays} days. Pick your platform.</p>
+        <p class="center muted">Free to download and rename. Premium unlocks free for {trialDays} days — no card. Pick your platform.</p>
         <div class="dl-row">
           <!-- PLACEHOLDER hrefs: point these at the signed installers (GitHub Releases) -->
           <a class="btn btn-lg" href="#">macOS</a>
@@ -477,6 +580,25 @@ const features: Feature[] = [
     border-radius: 10px;
   }
 
+  /* More features (compact grid) */
+  .more { max-width: var(--max); margin: 0 auto; padding: 1rem 1.5rem 4rem; }
+  .more h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); margin: 0.5rem 0 0; }
+  .more-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.4rem; margin-top: 2.6rem;
+  }
+  .more-card {
+    border: 1px solid var(--line); border-radius: 16px; padding: 1.7rem 1.6rem;
+    background: #fff; transition: transform 0.12s ease, box-shadow 0.2s ease;
+  }
+  .more-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -24px rgba(20,20,40,0.4); }
+  .more-icon {
+    width: 30px; height: 30px; color: var(--accent);
+    padding: 0.5rem; background: #eef2ff; border-radius: 10px; box-sizing: content-box;
+  }
+  .more-card h3 { font-size: 1.15rem; margin: 1rem 0 0.5rem; letter-spacing: -0.01em; }
+  .more-card p { color: var(--ink-soft); font-size: 0.98rem; margin: 0; line-height: 1.5; }
+
   /* Strip */
   .strip { background: var(--bg-dark); color: #f3f3f7; padding: 4.5rem 1.5rem; }
   .strip-grid {
@@ -490,12 +612,12 @@ const features: Feature[] = [
   .pricing { max-width: var(--max); margin: 0 auto; padding: 5rem 1.5rem 3rem; }
   .pricing h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: 0.6rem; }
   .price-grid {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem;
-    max-width: 760px; margin: 2rem auto 0; align-items: stretch;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.6rem;
+    max-width: 1040px; margin: 2rem auto 0; align-items: stretch;
   }
   .price-card {
     border: 1px solid var(--line); border-radius: 22px;
-    padding: 2.4rem; box-shadow: var(--shadow); background: #fff;
+    padding: 2rem; box-shadow: var(--shadow); background: #fff;
     display: flex; flex-direction: column;
   }
   .price-card.featured { border-color: var(--accent); box-shadow: 0 10px 40px rgba(27, 67, 196, 0.18); }
@@ -510,7 +632,7 @@ const features: Feature[] = [
   .price-sub { color: var(--ink-soft); margin: 0.4rem 0 1.4rem; }
   .price-card .ticks { margin: 1.2rem 0 1.8rem; flex: 1 0 auto; }
   .price-foot { text-align: center; color: var(--ink-soft); font-size: 0.88rem; margin: 0.9rem 0 0; min-height: 2.7rem; }
-  @media (max-width: 640px) { .price-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .price-grid { grid-template-columns: 1fr; max-width: 420px; } }
 
   /* Download */
   .download { max-width: var(--max); margin: 0 auto; padding: 3rem 1.5rem 5rem; }
@@ -579,4 +701,28 @@ const features: Feature[] = [
       }, 2800);
     });
   }
+</script>
+
+<!-- Paddle Checkout — LIVE/production (env + token set in the frontmatter). -->
+<script is:inline src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script define:vars={{ paddleEnv, paddleToken }}>
+  // Wait for paddle.js (loaded just above) to be ready, then open the hosted
+  // checkout for the clicked plan's price id.
+  function wirePaddle() {
+    if (!window.Paddle) {
+      setTimeout(wirePaddle, 200);
+      return;
+    }
+    window.Paddle.Environment.set(paddleEnv);
+    window.Paddle.Initialize({ token: paddleToken });
+    document.querySelectorAll(".buy").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const priceId = btn.getAttribute("data-price");
+        if (priceId) {
+          window.Paddle.Checkout.open({ items: [{ priceId, quantity: 1 }] });
+        }
+      });
+    });
+  }
+  wirePaddle();
 </script>

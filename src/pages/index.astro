@@ -23,18 +23,18 @@ const siteUrl = "https://yourcurator.app";
 // script in one flip, site-wide.
 import { launched } from "../config";
 const downloadUrls = { mac: "#", windows: "#", linux: "#" }; // set at launch
-// Register-interest capture. Preferred: a hosted form (Tally/Formspree — set
-// interestFormUrl once the account exists). Until then, fall back to a
-// pre-filled support email so the button is never dead. NOTE: the fallback
-// depends on Cloudflare Email Routing forwarding support@yourcurator.app.
-const interestFormUrl = ""; // e.g. "https://tally.so/r/xxxxx"
+// Register-interest capture: an inline Web3Forms form (submissions are emailed
+// to the address the access key was created for — webform@neutrade.co.uk).
+// Set w3fAccessKey from the app.web3forms.com dashboard to activate the form;
+// while it's empty the section falls back to a pre-filled support email so the
+// button is never dead. NOTE: the fallback depends on Cloudflare Email Routing
+// forwarding support@yourcurator.app.
+const w3fAccessKey = ""; // from app.web3forms.com (account: webform@neutrade.co.uk)
 const interestMailto = `mailto:support@yourcurator.app?subject=${encodeURIComponent(
   "Curator — register my interest",
 )}&body=${encodeURIComponent(
   "Hi — please let me know when Curator launches.\n\nMy platform: macOS / Windows / Linux",
 )}`;
-const interestUrl = interestFormUrl || interestMailto;
-const interestNewTab = Boolean(interestFormUrl); // forms open in a new tab; mailto shouldn't
 // ────────────────────────────────────────────────────────────────────────────
 const ogImage = `${siteUrl}/og-card.png`; // absolute — social scrapers need a full URL
 // Numeric prices for the structured-data offers (Schema.org wants a bare number +
@@ -498,14 +498,43 @@ const moreFeatures: MoreFeature[] = [
               Register your interest and you'll be the first to know when it ships —
               nothing else, no spam.
             </p>
-            <div class="dl-row">
-              <a
-                class="btn btn-lg"
-                href={interestUrl}
-                target={interestNewTab ? "_blank" : undefined}
-                rel={interestNewTab ? "noopener" : undefined}
-              >Register your interest</a>
-            </div>
+            {w3fAccessKey ? (
+              <form
+                id="interest-form"
+                class="interest-form"
+                action="https://api.web3forms.com/submit"
+                method="POST"
+              >
+                <input type="hidden" name="access_key" value={w3fAccessKey} />
+                <input type="hidden" name="subject" value="Curator — register my interest" />
+                <input type="hidden" name="from_name" value="yourcurator.app" />
+                {/* No-JS fallback: Web3Forms redirects here after its hosted thank-you. */}
+                <input type="hidden" name="redirect" value={`${siteUrl}/?registered=1#download`} />
+                {/* Honeypot — hidden from humans; bots that tick it are dropped. */}
+                <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+                <div class="interest-row">
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="you@example.com"
+                    aria-label="Your email address"
+                  />
+                  <select name="platform" aria-label="Your platform (optional)">
+                    <option value="">Platform (optional)</option>
+                    <option>macOS</option>
+                    <option>Windows</option>
+                    <option>Linux</option>
+                  </select>
+                  <button class="btn btn-lg" type="submit">Register interest</button>
+                </div>
+                <p class="form-status center" role="status" aria-live="polite"></p>
+              </form>
+            ) : (
+              <div class="dl-row">
+                <a class="btn btn-lg" href={interestMailto}>Register your interest</a>
+              </div>
+            )}
             <p class="center cta-note">Coming to Apple Silicon · Windows 10/11 · AppImage</p>
           </>
         )}
@@ -722,6 +751,23 @@ const moreFeatures: MoreFeature[] = [
   .download h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
   .dl-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin: 1.8rem 0 0.6rem; }
 
+  /* Register-interest form (pre-launch) */
+  .interest-form { margin: 1.8rem auto 0.6rem; max-width: 640px; }
+  .interest-row { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
+  .interest-row input[type="email"],
+  .interest-row select {
+    font: inherit; color: var(--ink); background: #fff;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 0.8rem 1.2rem; min-width: 0;
+  }
+  .interest-row input[type="email"] { flex: 1 1 220px; }
+  .interest-row input[type="email"]:focus,
+  .interest-row select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .interest-form .hp { position: absolute; left: -9999px; }
+  .form-status { min-height: 1.4em; margin: 0.8rem 0 0; font-weight: 600; }
+  .form-status.ok { color: #1a7f37; }
+  .form-status.err { color: #b42318; }
+
   /* Footer */
   .footer { border-top: 1px solid var(--line); padding: 3rem 1.5rem; max-width: var(--max); margin: 0 auto; }
   .foot-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
@@ -767,6 +813,43 @@ const moreFeatures: MoreFeature[] = [
     ["pointerdown", "touchstart", "scroll", "keydown"].forEach((e) =>
       document.addEventListener(e, tryPlay, { once: true, passive: true }),
     );
+  }
+
+  // Register-interest form (pre-launch): submit to Web3Forms via fetch and show
+  // the result inline. If fetch itself fails (network/extension), fall back to a
+  // native POST — Web3Forms then shows its hosted thank-you and redirects back
+  // (the `redirect` hidden field). `?registered=1` covers that no-JS/fallback
+  // return trip with the same inline message.
+  const interestForm = document.getElementById("interest-form") as HTMLFormElement | null;
+  if (interestForm) {
+    const status = interestForm.querySelector(".form-status") as HTMLElement;
+    const showOk = () => {
+      status.textContent = "Thanks — you're on the list. We'll email you when Curator ships.";
+      status.classList.add("ok");
+      (interestForm.querySelector(".interest-row") as HTMLElement).style.display = "none";
+    };
+    if (new URLSearchParams(location.search).get("registered") === "1") showOk();
+    interestForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      status.textContent = "Sending…";
+      status.classList.remove("ok", "err");
+      try {
+        const res = await fetch(interestForm.action, {
+          method: "POST",
+          body: new FormData(interestForm),
+          headers: { Accept: "application/json" },
+        });
+        const data = await res.json();
+        if (data.success) {
+          showOk();
+        } else {
+          status.textContent = data.message || "Something went wrong — please try again.";
+          status.classList.add("err");
+        }
+      } catch {
+        interestForm.submit(); // native fallback → hosted thank-you → redirect back
+      }
+    });
   }
 
   // Crossfade each feature slideshow through its slides on a timer. Skipped when

@@ -1,6 +1,6 @@
 # Curator
 
-> Curator is a fast, native desktop app for macOS, Windows and Linux that renames messy media downloads into clean, correctly-named TV and film files and files them into a browsable collection. It is a modern, lightweight alternative to FileBot. Pricing is $9.99/year or $80 once, with a 14-day free trial.
+> Curator is a fast, native desktop app for macOS, Windows and Linux that renames messy media downloads into clean, correctly-named TV and film files and files them into a browsable collection. It is a modern, lightweight alternative to FileBot. Pricing is $9.99/year or $80 once, with a 14-day free trial. Curator is launching soon — you can register your interest at https://yourcurator.app/#download to be told when it ships.
 
 Curator matches files against TheTVDB, TheMovieDB and Trakt, shows a confidence score for every match, and offers a poster picker when it is unsure. It tracks collection completion, reports the episodes you are missing, and includes a full-screen presentation mode. It is built in Rust (around 12 MB, no Java, no bundled web browser), and your library stays on your own machine.
 
@@ -14,8 +14,9 @@ Curator matches files against TheTVDB, TheMovieDB and Trakt, shows a confidence 
 
 ## Key facts
 
+- Status: launching soon — not yet downloadable; register interest at https://yourcurator.app/#download.
 - Platforms: macOS, Windows and Linux.
-- Pricing: $9.99/year or $80 one-time for the current major version; 14-day free trial, no card required.
+- Pricing (from launch): $9.99/year or $80 one-time for the current major version; 14-day free trial, no card required.
 - Metadata sources: TheTVDB, TheMovieDB and Trakt.
 - Licence covers 2 computers and is offline-verifiable (no phone-home lockout).
 - Category: media file renamer and collection manager; a FileBot alternative.

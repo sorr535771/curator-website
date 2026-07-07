@@ -1,5 +1,6 @@
 ---
 import Legal from "../layouts/Legal.astro";
+import { launched } from "../config";
 // "Curator vs FileBot" comparison page. Targets the main search term for this
 // app ("FileBot alternative") and is the kind of page that earns links. Kept
 // honest — FileBot is a capable, long-established tool, and the page says where
@@ -127,7 +128,7 @@ const faq = {
   </p>
 
   <p class="cmp-cta">
-    <a class="btn" href="/#download">Download free</a>
+    <a class="btn" href="/#download">{launched ? "Download free" : "Register your interest"}</a>
     <a class="btn btn-ghost" href="/#features">See the features</a>
   </p>
 

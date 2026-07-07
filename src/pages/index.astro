@@ -13,6 +13,29 @@ const paddleToken = "live_a5cec268b42f7c3810b9aa81b3d";
 const yearlyPriceId = "pri_01kv3p9gv7hj74njs8e3448t13";
 const lifetimePriceId = "pri_01kv3paynp2j0jeagp6jn2e34f";
 const siteUrl = "https://yourcurator.app";
+
+// ── LAUNCH SWITCH ───────────────────────────────────────────────────────────
+// The product hasn't publicly launched yet, so every buy/download CTA is
+// replaced with a register-your-interest link and Paddle checkout is not
+// loaded. ON LAUNCH DAY: flip `launched` in src/config.ts and fill in
+// `downloadUrls` below (signed installers on GitHub Releases / R2) — that
+// restores the Buy buttons, the platform download buttons and the Paddle
+// script in one flip, site-wide.
+import { launched } from "../config";
+const downloadUrls = { mac: "#", windows: "#", linux: "#" }; // set at launch
+// Register-interest capture. Preferred: a hosted form (Tally/Formspree — set
+// interestFormUrl once the account exists). Until then, fall back to a
+// pre-filled support email so the button is never dead. NOTE: the fallback
+// depends on Cloudflare Email Routing forwarding support@yourcurator.app.
+const interestFormUrl = ""; // e.g. "https://tally.so/r/xxxxx"
+const interestMailto = `mailto:support@yourcurator.app?subject=${encodeURIComponent(
+  "Curator — register my interest",
+)}&body=${encodeURIComponent(
+  "Hi — please let me know when Curator launches.\n\nMy platform: macOS / Windows / Linux",
+)}`;
+const interestUrl = interestFormUrl || interestMailto;
+const interestNewTab = Boolean(interestFormUrl); // forms open in a new tab; mailto shouldn't
+// ────────────────────────────────────────────────────────────────────────────
 const ogImage = `${siteUrl}/og-card.png`; // absolute — social scrapers need a full URL
 // Numeric prices for the structured-data offers (Schema.org wants a bare number +
 // currency, not the "$9.99" display strings above). Keep these in step with the
@@ -53,6 +76,7 @@ const structuredData = {
       description:
         "Curator renames messy media downloads into clean, correctly-named files and files them into a browsable collection. A fast, native desktop app and a modern FileBot alternative.",
       publisher: { "@id": `${siteUrl}/#org` },
+      // Pre-launch the offers are marked PreOrder; flips to InStock with `launched`.
       offers: [
         {
           "@type": "Offer",
@@ -61,6 +85,7 @@ const structuredData = {
           priceCurrency,
           description: "Rename and organise your media, free forever. No account, no card, no expiry.",
           url: `${siteUrl}/#pricing`,
+          availability: launched ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
         },
         {
           "@type": "Offer",
@@ -69,6 +94,7 @@ const structuredData = {
           priceCurrency,
           category: "subscription",
           url: `${siteUrl}/#pricing`,
+          availability: launched ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
         },
         {
           "@type": "Offer",
@@ -76,6 +102,7 @@ const structuredData = {
           price: lifetimePriceValue,
           priceCurrency,
           url: `${siteUrl}/#pricing`,
+          availability: launched ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
         },
       ],
     },
@@ -247,9 +274,9 @@ const moreFeatures: MoreFeature[] = [
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#download">Download</a>
+        <a href="#download">{launched ? "Download" : "Get notified"}</a>
         <a href="/contact">Contact</a>
-        <a class="btn btn-sm" href="#download">Download free</a>
+        <a class="btn btn-sm" href="#download">{launched ? "Download free" : "Register interest"}</a>
       </nav>
     </header>
 
@@ -264,10 +291,18 @@ const moreFeatures: MoreFeature[] = [
           Windows and Linux. No browser in disguise, no Java.
         </p>
         <div class="cta-row">
-          <a class="btn btn-lg" href="#download">Download free</a>
+          {launched ? (
+            <a class="btn btn-lg" href="#download">Download free</a>
+          ) : (
+            <a class="btn btn-lg" href="#download">Register your interest</a>
+          )}
           <a class="btn btn-lg btn-ghost" href="#pricing">See Premium</a>
         </div>
-        <p class="cta-note">Free to rename, forever · {trialDays}-day Premium trial, no card required</p>
+        <p class="cta-note">
+          {launched
+            ? `Free to rename, forever · ${trialDays}-day Premium trial, no card required`
+            : `Launching soon · Free to rename, forever · ${trialDays}-day Premium trial, no card required`}
+        </p>
 
         <div class="hero-media">
           <video
@@ -360,7 +395,11 @@ const moreFeatures: MoreFeature[] = [
       <section id="pricing" class="pricing">
         <p class="eyebrow center">Pricing</p>
         <h2 class="center">Free to rename. Premium for the rest.</h2>
-        <p class="price-sub center">Renaming is free forever. Try everything else free for {trialDays} days — no card required — then stay on Free or upgrade.</p>
+        <p class="price-sub center">
+          {launched
+            ? `Renaming is free forever. Try everything else free for ${trialDays} days — no card required — then stay on Free or upgrade.`
+            : `Renaming will be free forever. At launch you'll be able to try everything else free for ${trialDays} days — no card required — then stay on Free or upgrade.`}
+        </p>
         <div class="price-grid">
           <div class="price-card">
             <p class="plan-name">Free</p>
@@ -375,8 +414,12 @@ const moreFeatures: MoreFeature[] = [
               <li>Offline filename parsing</li>
               <li>No account, no card, no expiry</li>
             </ul>
-            <a class="btn btn-lg full btn-ghost" href="#download">Download free</a>
-            <p class="price-foot">Yours to keep. Upgrade any time.</p>
+            {launched ? (
+              <a class="btn btn-lg full btn-ghost" href="#download">Download free</a>
+            ) : (
+              <a class="btn btn-lg full btn-ghost" href="#download">Register interest</a>
+            )}
+            <p class="price-foot">{launched ? "Yours to keep. Upgrade any time." : "Available at launch. Yours to keep."}</p>
           </div>
           <div class="price-card">
             <p class="plan-name">Premium Yearly</p>
@@ -392,9 +435,17 @@ const moreFeatures: MoreFeature[] = [
               <li>Subtitles, NFO &amp; artwork, anime, CLI &amp; scripting</li>
               <li>Use it on 2 of your computers · every update while subscribed</li>
             </ul>
-            <button class="btn btn-lg full buy" data-price={yearlyPriceId}>Buy yearly</button>
-            <a class="btn btn-lg full btn-ghost" href="#download">Start free trial</a>
-            <p class="price-foot">Then {yearlyPrice}/year. Cancel any time.</p>
+            {launched ? (
+              <>
+                <button class="btn btn-lg full buy" data-price={yearlyPriceId}>Buy yearly</button>
+                <a class="btn btn-lg full btn-ghost" href="#download">Start free trial</a>
+              </>
+            ) : (
+              <a class="btn btn-lg full" href="#download">Register your interest</a>
+            )}
+            <p class="price-foot">
+              {launched ? `Then ${yearlyPrice}/year. Cancel any time.` : `On sale at launch — ${yearlyPrice}/year, cancel any time.`}
+            </p>
           </div>
           <div class="price-card featured">
             <p class="plan-name">Premium Lifetime <span class="badge">Best value</span></p>
@@ -408,24 +459,56 @@ const moreFeatures: MoreFeature[] = [
               <li>Free updates for the current major version</li>
               <li>Use it on 2 of your computers</li>
             </ul>
-            <button class="btn btn-lg full buy" data-price={lifetimePriceId}>Buy lifetime</button>
-            <a class="btn btn-lg full btn-ghost" href="#download">Start free trial</a>
-            <p class="price-foot">One payment of {lifetimePrice}. Covers all of the current major version.</p>
+            {launched ? (
+              <>
+                <button class="btn btn-lg full buy" data-price={lifetimePriceId}>Buy lifetime</button>
+                <a class="btn btn-lg full btn-ghost" href="#download">Start free trial</a>
+              </>
+            ) : (
+              <a class="btn btn-lg full" href="#download">Register your interest</a>
+            )}
+            <p class="price-foot">
+              {launched
+                ? `One payment of ${lifetimePrice}. Covers all of the current major version.`
+                : `On sale at launch — one payment of ${lifetimePrice}, covers all of the current major version.`}
+            </p>
           </div>
         </div>
       </section>
 
-      <!-- DOWNLOAD -->
+      <!-- DOWNLOAD / REGISTER INTEREST (pre-launch) -->
       <section id="download" class="download">
-        <h2 class="center">Get Curator</h2>
-        <p class="center muted">Free to download and rename. Premium unlocks free for {trialDays} days — no card. Pick your platform.</p>
-        <div class="dl-row">
-          <!-- PLACEHOLDER hrefs: point these at the signed installers (GitHub Releases) -->
-          <a class="btn btn-lg" href="#">macOS</a>
-          <a class="btn btn-lg" href="#">Windows</a>
-          <a class="btn btn-lg" href="#">Linux</a>
-        </div>
-        <p class="center cta-note">Apple Silicon · Windows 10/11 · AppImage</p>
+        {launched ? (
+          <>
+            <h2 class="center">Get Curator</h2>
+            <p class="center muted">Free to download and rename. Premium unlocks free for {trialDays} days — no card. Pick your platform.</p>
+            <div class="dl-row">
+              <a class="btn btn-lg" href={downloadUrls.mac}>macOS</a>
+              <a class="btn btn-lg" href={downloadUrls.windows}>Windows</a>
+              <a class="btn btn-lg" href={downloadUrls.linux}>Linux</a>
+            </div>
+            <p class="center cta-note">Apple Silicon · Windows 10/11 · AppImage</p>
+          </>
+        ) : (
+          <>
+            <p class="eyebrow center">Launching soon</p>
+            <h2 class="center">Get Curator</h2>
+            <p class="center muted">
+              Curator is in final testing and launches soon on macOS, Windows and Linux.
+              Register your interest and you'll be the first to know when it ships —
+              nothing else, no spam.
+            </p>
+            <div class="dl-row">
+              <a
+                class="btn btn-lg"
+                href={interestUrl}
+                target={interestNewTab ? "_blank" : undefined}
+                rel={interestNewTab ? "noopener" : undefined}
+              >Register your interest</a>
+            </div>
+            <p class="center cta-note">Coming to Apple Silicon · Windows 10/11 · AppImage</p>
+          </>
+        )}
       </section>
     </main>
 
@@ -438,7 +521,7 @@ const moreFeatures: MoreFeature[] = [
         <nav class="foot-links">
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
-          <a href="#download">Download</a>
+          <a href="#download">{launched ? "Download" : "Get notified"}</a>
           <a href="/vs-filebot">vs FileBot</a>
           <a href="/contact">Contact</a>
           <a href="/terms">Terms</a>
@@ -703,26 +786,30 @@ const moreFeatures: MoreFeature[] = [
   }
 </script>
 
-<!-- Paddle Checkout — LIVE/production (env + token set in the frontmatter). -->
-<script is:inline src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
-<script define:vars={{ paddleEnv, paddleToken }}>
-  // Wait for paddle.js (loaded just above) to be ready, then open the hosted
-  // checkout for the clicked plan's price id.
-  function wirePaddle() {
-    if (!window.Paddle) {
-      setTimeout(wirePaddle, 200);
-      return;
-    }
-    window.Paddle.Environment.set(paddleEnv);
-    window.Paddle.Initialize({ token: paddleToken });
-    document.querySelectorAll(".buy").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const priceId = btn.getAttribute("data-price");
-        if (priceId) {
-          window.Paddle.Checkout.open({ items: [{ priceId, quantity: 1 }] });
-        }
+<!-- Paddle Checkout — LIVE/production (env + token set in the frontmatter).
+     Only loaded once `launched` is true: pre-launch there are no Buy buttons,
+     so the live checkout script isn't shipped at all. -->
+{launched && <script is:inline src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>}
+{launched && (
+  <script define:vars={{ paddleEnv, paddleToken }}>
+    // Wait for paddle.js (loaded just above) to be ready, then open the hosted
+    // checkout for the clicked plan's price id.
+    function wirePaddle() {
+      if (!window.Paddle) {
+        setTimeout(wirePaddle, 200);
+        return;
+      }
+      window.Paddle.Environment.set(paddleEnv);
+      window.Paddle.Initialize({ token: paddleToken });
+      document.querySelectorAll(".buy").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const priceId = btn.getAttribute("data-price");
+          if (priceId) {
+            window.Paddle.Checkout.open({ items: [{ priceId, quantity: 1 }] });
+          }
+        });
       });
-    });
-  }
-  wirePaddle();
-</script>
+    }
+    wirePaddle();
+  </script>
+)}

@@ -1,0 +1,61 @@
+---
+import Legal from "../layouts/Legal.astro";
+// News & announcements. To add a post, prepend an entry to `posts` — newest
+// first. Posts are short, so each renders in full on this page (no separate
+// post pages yet); the slug gives every post a stable anchor (/news#slug).
+type Post = {
+  slug: string;
+  date: string; // ISO date for <time datetime>
+  dateDisplay: string; // human date, British style
+  title: string;
+  body: string[]; // paragraphs
+};
+const posts: Post[] = [
+  {
+    slug: "online-matching-free",
+    date: "2026-07-12",
+    dateDisplay: "12 July 2026",
+    title: "Online matching is now included in the free tier",
+    body: [
+      "Curator's free tier now matches your files against the online databases. Drop in a folder of cryptically-named downloads and the free app looks each one up properly — real show and film titles, the correct season and episode numbering, and posters — rather than making tidy guesses from the filename alone.",
+      "Until now, online matching sat with the Premium features and the free tier relied on offline filename parsing. Matching is the heart of the app, though, and you shouldn't need a trial to see it work properly. So renaming and online matching are both free — forever, with no account and no card.",
+      "Premium stays as it was for everything beyond the rename: subtitles, artwork and NFO files, the browsable collection and its library tools, network poster mode, duplicate detection and health reports. If all you want is your files named correctly, the free tier now does the whole job. The change is in the current build and will be in the public release at launch.",
+    ],
+  },
+];
+---
+
+<Legal
+  title="News"
+  eyebrow="Announcements"
+  description="News and announcements from Curator — product updates and changes to the free and Premium tiers."
+>
+  {
+    posts.map((p) => (
+      <article class="post" id={p.slug}>
+        <p class="post-date">
+          <time datetime={p.date}>{p.dateDisplay}</time>
+        </p>
+        <h2>
+          <a href={`#${p.slug}`}>{p.title}</a>
+        </h2>
+        {p.body.map((para) => (
+          <p>{para}</p>
+        ))}
+      </article>
+    ))
+  }
+</Legal>
+
+<style is:global>
+  /* Post styling on top of the shared .prose rules from Legal.astro. */
+  .prose .post { padding: 0.4rem 0 1.6rem; }
+  .prose .post + .post { border-top: 1px solid var(--line); padding-top: 2rem; }
+  .prose .post h2 { border-top: none; padding-top: 0; margin: 0.2rem 0 0.6rem; font-size: 1.45rem; }
+  .prose .post h2 a { color: var(--ink); }
+  .prose .post h2 a:hover { color: var(--accent); text-decoration: none; }
+  .prose .post-date {
+    margin: 0; color: var(--ink-soft); font-size: 0.88rem;
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
+  }
+</style>

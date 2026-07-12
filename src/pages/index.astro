@@ -83,7 +83,7 @@ const structuredData = {
           name: "Free",
           price: "0",
           priceCurrency,
-          description: "Rename and organise your media, free forever. No account, no card, no expiry.",
+          description: "Rename your media and match it online — real titles, episode numbers and posters — free forever. No account, no card, no expiry.",
           url: `${siteUrl}/#pricing`,
           availability: launched ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
         },
@@ -274,6 +274,7 @@ const moreFeatures: MoreFeature[] = [
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
+        <a href="/news">News</a>
         <a href="#download">{launched ? "Download" : "Get notified"}</a>
         <a href="/contact">Contact</a>
         <a class="btn btn-sm" href="#download">{launched ? "Download free" : "Register interest"}</a>
@@ -286,9 +287,10 @@ const moreFeatures: MoreFeature[] = [
         <p class="eyebrow">A modern alternative to FileBot</p>
         <h1>Tidy media,<br /><span class="grad">automatically.</span></h1>
         <p class="lead">
-          Curator renames cryptic downloads into clean, correctly-named files — then
-          files them into a collection worth browsing. Native and fast on macOS,
-          Windows and Linux. No browser in disguise, no Java.
+          Curator renames cryptic downloads into clean, correctly-named files —
+          matched online for real titles, episode numbers and posters — then files
+          them into a collection worth browsing. Native and fast on macOS, Windows
+          and Linux. No browser in disguise, no Java.
         </p>
         <div class="cta-row">
           {launched ? (
@@ -300,8 +302,8 @@ const moreFeatures: MoreFeature[] = [
         </div>
         <p class="cta-note">
           {launched
-            ? `Free to rename, forever · ${trialDays}-day Premium trial, no card required`
-            : `Launching soon · Free to rename, forever · ${trialDays}-day Premium trial, no card required`}
+            ? `Rename and match online, free forever · ${trialDays}-day Premium trial, no card required`
+            : `Launching soon · Rename and match online, free forever · ${trialDays}-day Premium trial, no card required`}
         </p>
 
         <div class="hero-media">
@@ -394,11 +396,11 @@ const moreFeatures: MoreFeature[] = [
       <!-- PRICING -->
       <section id="pricing" class="pricing">
         <p class="eyebrow center">Pricing</p>
-        <h2 class="center">Free to rename. Premium for the rest.</h2>
+        <h2 class="center">Free to rename and match. Premium for the rest.</h2>
         <p class="price-sub center">
           {launched
-            ? `Renaming is free forever. Try everything else free for ${trialDays} days — no card required — then stay on Free or upgrade.`
-            : `Renaming will be free forever. At launch you'll be able to try everything else free for ${trialDays} days — no card required — then stay on Free or upgrade.`}
+            ? `Renaming and online matching are free forever. Try everything else free for ${trialDays} days — no card required — then stay on Free or upgrade.`
+            : `Renaming and online matching will be free forever. At launch you'll be able to try everything else free for ${trialDays} days — no card required — then stay on Free or upgrade.`}
         </p>
         <div class="price-grid">
           <div class="price-card">
@@ -409,9 +411,10 @@ const moreFeatures: MoreFeature[] = [
             </div>
             <ul class="ticks">
               <li>Rename TV, film &amp; anime with live preview</li>
+              <li>Online matching — real titles, episode numbers &amp; posters via TheTVDB &amp; Trakt</li>
               <li>Smart, TV and Movie presets</li>
               <li>Move, copy &amp; safe renames — one-click undo</li>
-              <li>Offline filename parsing</li>
+              <li>Offline filename parsing when you're not connected</li>
               <li>No account, no card, no expiry</li>
             </ul>
             {launched ? (
@@ -429,7 +432,6 @@ const moreFeatures: MoreFeature[] = [
             </div>
             <ul class="ticks">
               <li>Everything in Free, plus:</li>
-              <li>Live matching via TheTVDB, TheMovieDB &amp; Trakt</li>
               <li>The full collection, completion tracking &amp; presentation mode</li>
               <li>Automation, duplicate &amp; quality-upgrade detection, health reports</li>
               <li>Subtitles, NFO &amp; artwork, anime, CLI &amp; scripting</li>
@@ -481,7 +483,7 @@ const moreFeatures: MoreFeature[] = [
         {launched ? (
           <>
             <h2 class="center">Get Curator</h2>
-            <p class="center muted">Free to download and rename. Premium unlocks free for {trialDays} days — no card. Pick your platform.</p>
+            <p class="center muted">Free to download, rename and match online. Premium unlocks free for {trialDays} days — no card. Pick your platform.</p>
             <div class="dl-row">
               <a class="btn btn-lg" href={downloadUrls.mac}>macOS</a>
               <a class="btn btn-lg" href={downloadUrls.windows}>Windows</a>
@@ -550,6 +552,7 @@ const moreFeatures: MoreFeature[] = [
         <nav class="foot-links">
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
+          <a href="/news">News</a>
           <a href="#download">{launched ? "Download" : "Get notified"}</a>
           <a href="/vs-filebot">vs FileBot</a>
           <a class="foot-reddit" href="https://www.reddit.com/r/FilebotAlternative/" rel="noopener" target="_blank" aria-label="Curator community on Reddit" title="Community on Reddit">

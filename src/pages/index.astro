@@ -271,7 +271,20 @@ const moreFeatures: MoreFeature[] = [
         <img src="/logo.png" width="28" height="28" alt="" />
         <span>Curator</span>
       </a>
-      <nav class="nav-links">
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <nav class="nav-links" id="primary-nav">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
         <a href="/news">News</a>
@@ -646,6 +659,13 @@ const moreFeatures: MoreFeature[] = [
   .brand { display: inline-flex; align-items: center; gap: 0.55rem; font-weight: 700; font-size: 1.1rem; }
   .nav-links { display: flex; align-items: center; gap: 1.4rem; font-weight: 500; }
   .nav-links a:not(.btn):hover { color: var(--accent); }
+  .nav-toggle {
+    display: none; align-items: center; justify-content: center;
+    width: 44px; height: 44px; padding: 0;
+    background: transparent; border: 1px solid var(--line); border-radius: 11px;
+    color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .nav-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Hero */
   .hero {
@@ -787,7 +807,18 @@ const moreFeatures: MoreFeature[] = [
 
   /* Responsive */
   @media (max-width: 800px) {
-    .nav-links a:not(.btn) { display: none; }
+    .nav-toggle { display: inline-flex; }
+    .nav-links {
+      position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; align-items: stretch; gap: 0;
+      padding: 0.4rem 0; background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.10);
+      display: none;
+    }
+    .nav-links[data-open="true"] { display: flex; }
+    .nav-links a { padding: 0.9rem 1.5rem; }
+    .nav-links a.btn { margin: 0.5rem 1.5rem 0.6rem; text-align: center; }
     .feature { grid-template-columns: 1fr; gap: 1.8rem; padding: 2.5rem 0; }
     .feature.reverse .feature-copy { order: 0; }
     .strip-grid { grid-template-columns: 1fr 1fr; gap: 1.8rem; }
@@ -805,6 +836,31 @@ const moreFeatures: MoreFeature[] = [
   // Keep the footer year current without a build step.
   const y = document.getElementById("yr");
   if (y) y.textContent = String(new Date().getFullYear());
+
+  // Mobile nav: the burger toggles the stacked menu. Closes on link tap, on a
+  // click outside the header, and on Escape. aria-expanded tracks the state.
+  const navToggle = document.querySelector(".nav-toggle");
+  const primaryNav = document.getElementById("primary-nav");
+  if (navToggle && primaryNav) {
+    const setNav = (open) => {
+      primaryNav.dataset.open = String(open);
+      navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    };
+    navToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setNav(primaryNav.dataset.open !== "true");
+    });
+    primaryNav.addEventListener("click", (e) => {
+      if (e.target instanceof Element && e.target.closest("a")) setNav(false);
+    });
+    document.addEventListener("click", (e) => {
+      if (primaryNav.dataset.open === "true" && e.target instanceof Element && !e.target.closest(".nav")) setNav(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") setNav(false);
+    });
+  }
 
   // Nudge the hero video to autoplay. Safari/WebKit can ignore the `muted`
   // attribute when it comes from server-rendered HTML and then block muted

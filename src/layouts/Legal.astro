@@ -51,7 +51,20 @@ const canonical = `${siteUrl}${Astro.url.pathname}`;
         <img src="/logo.png" width="28" height="28" alt="" />
         <span>Curator</span>
       </a>
-      <nav class="nav-links">
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <nav class="nav-links" id="primary-nav">
         <a href="/#features">Features</a>
         <a href="/#pricing">Pricing</a>
         <a href="/news">News</a>
@@ -100,6 +113,32 @@ const canonical = `${siteUrl}${Astro.url.pathname}`;
     <script is:inline>
       // Keep the footer year current without a build step.
       document.getElementById("yr").textContent = new Date().getFullYear();
+
+      // Mobile nav: the burger toggles the stacked menu. Closes on link tap, on a
+      // click outside the header, and on Escape. aria-expanded tracks the state.
+      (function () {
+        var toggle = document.querySelector(".nav-toggle");
+        var nav = document.getElementById("primary-nav");
+        if (!toggle || !nav) return;
+        function setNav(open) {
+          nav.dataset.open = String(open);
+          toggle.setAttribute("aria-expanded", String(open));
+          toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+        toggle.addEventListener("click", function (e) {
+          e.stopPropagation();
+          setNav(nav.dataset.open !== "true");
+        });
+        nav.addEventListener("click", function (e) {
+          if (e.target.closest && e.target.closest("a")) setNav(false);
+        });
+        document.addEventListener("click", function (e) {
+          if (nav.dataset.open === "true" && !(e.target.closest && e.target.closest(".nav"))) setNav(false);
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") setNav(false);
+        });
+      })();
     </script>
   </body>
 </html>
@@ -164,6 +203,13 @@ const canonical = `${siteUrl}${Astro.url.pathname}`;
   .nav-links a { color: var(--ink-soft); font-weight: 500; }
   .nav-links a:hover { color: var(--ink); text-decoration: none; }
   .nav-links a.btn { color: #fff; }
+  .nav-toggle {
+    display: none; align-items: center; justify-content: center;
+    width: 44px; height: 44px; padding: 0;
+    background: transparent; border: 1px solid var(--line); border-radius: 11px;
+    color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .nav-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Legal prose */
   .legal { max-width: 760px; margin: 0 auto; padding: 3.5rem 1.5rem 1rem; }
@@ -196,7 +242,17 @@ const canonical = `${siteUrl}${Astro.url.pathname}`;
   .copy { color: var(--ink-soft); font-size: 0.86rem; margin: 0.2rem 0 0; }
 
   @media (max-width: 640px) {
-    .nav-links { gap: 0.9rem; }
-    .nav-links a:not(.btn) { display: none; }
+    .nav-toggle { display: inline-flex; }
+    .nav-links {
+      position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; align-items: stretch; gap: 0;
+      padding: 0.4rem 0; background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.10);
+      display: none;
+    }
+    .nav-links[data-open="true"] { display: flex; }
+    .nav-links a { padding: 0.9rem 1.5rem; }
+    .nav-links a.btn { margin: 0.5rem 1.5rem 0.6rem; text-align: center; }
   }
 </style>

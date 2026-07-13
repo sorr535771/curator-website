@@ -1,0 +1,102 @@
+---
+import Legal from "../../layouts/Legal.astro";
+import { posts, type Post } from "../../data/news";
+
+// One static page per post, so every announcement has its own shareable URL
+// with correct link-preview metadata (title + excerpt flow into the layout's
+// OG/Twitter tags via the `title`/`description` props).
+export function getStaticPaths() {
+  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const siteUrl = "https://yourcurator.app";
+const url = `${siteUrl}/news/${post.slug}`;
+
+// Share-intent links — plain hrefs, no third-party scripts or trackers. The
+// user's own client opens them; nothing loads on our page.
+const shareTitle = `${post.title} — Curator`;
+const enc = encodeURIComponent;
+const shareLinks = [
+  { label: "X", href: `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(shareTitle)}` },
+  { label: "Reddit", href: `https://www.reddit.com/submit?url=${enc(url)}&title=${enc(shareTitle)}` },
+  { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}` },
+  { label: "Email", href: `mailto:?subject=${enc(shareTitle)}&body=${enc(url)}` },
+];
+---
+
+<Legal title={post.title} eyebrow="Announcements" description={post.excerpt}>
+  <article class="post">
+    <p class="post-date">
+      <time datetime={post.date}>{post.dateDisplay}</time>
+    </p>
+    {post.body.map((para) => <p>{para}</p>)}
+
+    <div class="share" data-share-url={url} data-share-title={shareTitle}>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" id="copy-link" aria-live="polite">Copy link</button>
+      {
+        shareLinks.map((s) => (
+          <a class="share-btn" href={s.href} target="_blank" rel="noopener noreferrer">
+            {s.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <p class="back"><a href="/news">← All news</a></p>
+  </article>
+</Legal>
+
+<script>
+  // Copy-link: uses the async Clipboard API where available, with a legacy
+  // fallback, and gives brief button feedback. No network, no tracking.
+  const btn = document.getElementById("copy-link");
+  const wrap = btn?.closest(".share");
+  const url = wrap?.getAttribute("data-share-url") ?? location.href;
+  btn?.addEventListener("click", async () => {
+    const original = btn.textContent;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const t = document.createElement("textarea");
+        t.value = url;
+        t.style.position = "fixed";
+        t.style.opacity = "0";
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand("copy");
+        document.body.removeChild(t);
+      }
+      btn.textContent = "Copied";
+    } catch {
+      btn.textContent = "Press Ctrl+C";
+    }
+    window.setTimeout(() => (btn.textContent = original), 1800);
+  });
+</script>
+
+<style is:global>
+  .prose .post .post-date {
+    margin: 0 0 1rem; color: var(--ink-soft); font-size: 0.88rem;
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
+  }
+  .prose .share {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    margin: 2rem 0 0.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line);
+  }
+  .prose .share-label {
+    font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--ink-soft); margin-right: 0.2rem;
+  }
+  .prose .share-btn {
+    display: inline-block; font: inherit; font-size: 0.9rem; font-weight: 600;
+    line-height: 1; cursor: pointer; color: var(--ink);
+    background: var(--surface, #fff); border: 1px solid var(--line);
+    border-radius: 999px; padding: 0.45rem 0.85rem; text-decoration: none;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .prose .share-btn:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+  .prose .back { margin-top: 1.6rem; font-weight: 600; }
+</style>

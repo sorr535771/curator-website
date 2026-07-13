@@ -1,0 +1,42 @@
+---
+import Legal from "../../layouts/Legal.astro";
+import { posts } from "../../data/news";
+---
+
+<Legal
+  title="News"
+  eyebrow="Announcements"
+  description="News and announcements from Curator — product updates and changes to the free and Premium tiers."
+>
+  <ul class="post-list">
+    {
+      posts.map((p) => (
+        <li class="post-item">
+          <p class="post-date">
+            <time datetime={p.date}>{p.dateDisplay}</time>
+          </p>
+          <h2>
+            <a href={`/news/${p.slug}`}>{p.title}</a>
+          </h2>
+          <p class="post-excerpt">{p.excerpt}</p>
+          <a class="post-more" href={`/news/${p.slug}`}>Read more →</a>
+        </li>
+      ))
+    }
+  </ul>
+</Legal>
+
+<style is:global>
+  .prose .post-list { list-style: none; padding: 0; margin: 0; }
+  .prose .post-item { padding: 0.4rem 0 1.6rem; }
+  .prose .post-item + .post-item { border-top: 1px solid var(--line); padding-top: 2rem; }
+  .prose .post-item h2 { border-top: none; padding-top: 0; margin: 0.2rem 0 0.5rem; font-size: 1.45rem; }
+  .prose .post-item h2 a { color: var(--ink); }
+  .prose .post-item h2 a:hover { color: var(--accent); text-decoration: none; }
+  .prose .post-excerpt { margin: 0 0 0.6rem; }
+  .prose .post-date {
+    margin: 0; color: var(--ink-soft); font-size: 0.88rem;
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
+  }
+  .prose .post-more { font-weight: 600; font-size: 0.95rem; }
+</style>

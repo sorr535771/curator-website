@@ -16,6 +16,19 @@ export type Post = {
 
 export const posts: Post[] = [
   {
+    slug: "auto-extract-archives",
+    date: "2026-07-13",
+    dateDisplay: "13 July 2026",
+    title: "Curator now unpacks your archives for you",
+    excerpt:
+      "Drop in a .zip, .rar or .7z — or point a watch folder at one — and Curator extracts it, then matches and renames the contents like any other file.",
+    body: [
+      "A lot of downloads still arrive wrapped in an archive — a .rar set, a .zip, a .7z. Until now you had to unpack those yourself before Curator could do anything with them. Not any more.",
+      "Turn on archive extraction and Curator handles the whole thing: drop an archive into the app, or let one land in a watch folder, and it unpacks it, works out what the contents actually are, and renames and moves or copies them just like any other file. It reads .zip, .rar (including multi-part sets), .7z and .tar/.gz, and it leaves the original archive exactly where it was.",
+      "The workflow is the one you'd want: drop in, extract, match the name, rename and file. Extraction is a Premium feature and is off by default — switch it on under Automation. It's in the current build and will ship in the public release at launch.",
+    ],
+  },
+  {
     slug: "online-matching-free",
     date: "2026-07-12",
     dateDisplay: "12 July 2026",
